@@ -42,11 +42,11 @@ const store = configureStore({
 const Stack = createNativeStackNavigator();
 
 
-const store = configureStore({
-  reducer: {
-    game, // Ajoutez votre reducer au magasin
-  },
-});
+// const store = configureStore({
+//   reducer: {
+//     game, // Ajoutez votre reducer au magasin
+//   },
+// });
 
 
 export default function App() {
