@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native"; // Importez useNavigation depuis React Navigation
 import Logo from "../components/Logo";
 
 const MesParties = () => {
   const [parties, setParties] = useState([]);
   const [partieActuelle, setPartieActuelle] = useState(null);
+  const navigation = useNavigation(); // Utilisez useNavigation pour accéder à l'objet de navigation
 
   // Simulation des données de parties
   const partiesEnregistrees = [
@@ -25,6 +27,7 @@ const MesParties = () => {
     // Mettez en œuvre le code pour commencer la partie ici
     // Peut-être naviguer vers un écran de jeu ou effectuer d'autres actions nécessaires
     console.log("Partie commencée:", partieActuelle.titre);
+    navigation.navigate("ChoixDuree"); // Naviguer vers la page ChoixDurée
   };
 
   return (

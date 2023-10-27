@@ -1,11 +1,19 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native"; // Importez useNavigation depuis React Navigation
 import Logo from "../components/Logo";
 
-export default function ChoixUnivers({ navigation }) {
+export default function ChoixUnivers() {
+  const navigation = useNavigation(); // Utilisez useNavigation pour accéder à l'objet de navigation
+
   const handleUniversSelection = (univers) => {
     // Vous pouvez utiliser la valeur 'univers' ici, par exemple, l'envoyer à votre backend ou la stocker dans l'état local
     console.log("Univers sélectionné:", univers);
+  };
+
+  const handleSuivant = () => {
+    // Naviguer vers la page PartieDetail
+    navigation.navigate("PartieDetail");
   };
 
   return (
@@ -30,10 +38,7 @@ export default function ChoixUnivers({ navigation }) {
       >
         <Text>Ville</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.suivantButton}
-        onPress={() => navigation.navigate("BulletPoint")}
-      >
+      <TouchableOpacity style={styles.suivantButton} onPress={handleSuivant}>
         <Text style={styles.buttonText}>Suivant</Text>
       </TouchableOpacity>
     </View>
