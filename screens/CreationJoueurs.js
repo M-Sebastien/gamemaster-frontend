@@ -10,32 +10,29 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import Logo from "../components/Logo";
 
 const CreationJoueurs = ({ navigation }) => {
-  const [players, setPlayers] = useState(["Joueur 1", "Joueur 2"]);
+  const [players, setPlayers] = useState([
+    { name: "Joueur 1", description: "" },
+    { name: "Joueur 2", description: "" },
+  ]);
 
   const handlePlayerNameChange = (text, index) => {
     const newPlayers = [...players];
-    newPlayers[index] = text;
+    newPlayers[index].description = text;
     setPlayers(newPlayers);
-  };
-
-  const handleSavePlayer = (index) => {
-    console.log(`Nom du Joueur ${index + 1} enregistré : ${players[index]}`);
-    // Logique pour enregistrer le nom du joueur (index) ici
   };
 
   const addPlayer = () => {
     if (players.length < 5) {
-      const newPlayers = [...players, `Joueur ${players.length + 1}`];
+      const newPlayers = [
+        ...players,
+        { name: `Joueur ${players.length + 1}`, description: "" },
+      ];
       setPlayers(newPlayers);
     } else {
       alert("Le nombre maximum de joueurs est atteint (5 joueurs).");
     }
   };
 
-  const removePlayer = (index) => {
-    const updatedPlayers = players.filter((_, i) => i !== index);
-    setPlayers(updatedPlayers);
-  };
   return (
     <View style={styles.container}>
       <Logo />
@@ -46,7 +43,7 @@ const CreationJoueurs = ({ navigation }) => {
           <TextInput
             style={styles.input}
             placeholder={`Joueur ${index + 1}`}
-            value={player}
+            value={player.description}
             onChangeText={(text) => handlePlayerNameChange(text, index)}
           />
           <View style={styles.iconsContainer}>
@@ -70,11 +67,15 @@ const CreationJoueurs = ({ navigation }) => {
         </View>
       ))}
       <TouchableOpacity onPress={addPlayer} style={styles.addButton}>
-        <Text style={styles.addButtonText}>Ajoutes un joueur</Text>
+        <Text style={styles.addButtonText}>Ajouter un joueur</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("ChoixDebut")}
+        onPress={() =>
+          navigation.navigate("BulletPoint", {
+            joueurs: players,
+          })
+        }
       >
         <Text style={styles.buttonText}>GO!</Text>
       </TouchableOpacity>
@@ -86,63 +87,44 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#5D726F",
+    alignItems: "center",
+    padding: 20,
   },
   intro: {
     fontFamily: "LeagueSpartan_700Bold",
     fontSize: 20,
-    textAlign: "center", // Centre le texte horizontalement
-    lineHeight: 20,
-    justifyContent: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 40,
+    color: "#efefef",
+    marginBottom: 20,
   },
   texte: {
     fontFamily: "LeagueSpartan_500Medium",
-    fontSize: 20,
-    textAlign: "center", // Centre le texte horizontalement
-    lineHeight: 0,
-    justifyContent: "center",
-    paddingHorizontal: 20,
+    fontSize: 18,
+    color: "#efefef",
+    marginBottom: 10,
   },
   playerContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginVertical: 18,
-    marginStart: 40,
+    marginVertical: 10,
+    width: "100%",
   },
   input: {
     flex: 1,
-    maxWidth: 200,
+    minWidth: "70%",
     minHeight: 40,
     padding: 10,
     fontFamily: "LeagueSpartan_500Medium",
-    fontSize: 17,
+    fontSize: 16,
     backgroundColor: "#efefef",
     borderRadius: 3,
   },
-  iconsContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginEnd: 20,
-  },
-  addIcon: {
-    margin: 10,
-  },
-  removeIcon: {
-    margin: 10,
-  },
   addButton: {
     backgroundColor: "#efefef",
-    paddingVertical: 18,
-    paddingHorizontal: 50,
+    paddingVertical: 12,
+    paddingHorizontal: 30,
     borderRadius: 8,
     marginTop: 20,
-    alignSelf: "center",
-    elevation: 3, // Ombre pour l'effet de profondeur (Android)
-    shadowColor: "#000", // Couleur de l'ombre (iOS)
-    shadowOpacity: 0.5, // Opacité de l'ombre (iOS)
-    shadowOffset: { width: 0, height: 4 }, // Décalage de l'ombre (iOS)
   },
   addButtonText: {
     fontSize: 16,
@@ -154,11 +136,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 50,
     borderRadius: 8,
     marginTop: 20,
-    alignSelf: "center",
-    elevation: 3, // Ombre pour l'effet de profondeur (Android)
-    shadowColor: "#000", // Couleur de l'ombre (iOS)
-    shadowOpacity: 0.5, // Opacité de l'ombre (iOS)
-    shadowOffset: { width: 0, height: 4 }, // Décalage de l'ombre (iOS)
   },
   buttonText: {
     fontSize: 16,

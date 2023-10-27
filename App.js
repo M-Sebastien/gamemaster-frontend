@@ -6,8 +6,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Menu from "./screens/Menu";
 import Connexion from "./screens/Connexion";
 import SignUp from "./screens/SignUp";
+import MesParties from "./screens/MesParties";
 import CreationJoueurs from "./screens/CreationJoueurs";
-import ChoixDuree from "./screens/ChoixContexte";
+import ChoixDuree from "./screens/ChoixDuree";
 import ChoixStyle from "./screens/ChoixStyle";
 import ChoixUnivers from "./screens/ChoixUnivers";
 import BulletPoint from "./screens/BulletPoint";
@@ -21,7 +22,6 @@ import {
   LeagueSpartan_500Medium,
   LeagueSpartan_700Bold,
 } from "@expo-google-fonts/league-spartan";
-import BulletPoint from "./screens/BulletPoint";
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +43,7 @@ export default function App() {
         <Stack.Screen name="Menu" component={Menu} />
         <Stack.Screen name="Connexion" component={Connexion} />
         <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen name="MesParties" component={MesParties} />
         <Stack.Screen name="CreationJoueurs" component={CreationJoueurs} />
         <Stack.Screen name="ChoixDuree" component={ChoixDuree} />
         <Stack.Screen name="ChoixStyle" component={ChoixStyle} />
