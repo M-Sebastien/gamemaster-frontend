@@ -20,7 +20,7 @@ export default function Menu({ navigation }) {
         </Text>
       </View>
       <View style={[styles.titreContainer, { height: (height * 1) / 5 }]}>
-        <Text style={styles.titre}>Entres dans l'histoire</Text>
+        <Text style={styles.titre}>Entre dans l'histoire</Text>
       </View>
       <View style={[styles.buttonContainer, { height: (height * 1) / 5 }]}>
         <TouchableOpacity
