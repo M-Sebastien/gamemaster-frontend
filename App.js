@@ -1,3 +1,4 @@
+
 import React from "react";
 import { StatusBar } from "react-native";
 
@@ -15,6 +16,10 @@ import BulletPoint from "./screens/BulletPoint";
 import PartieDetail from "./screens/PartieDetail";
 import ChoixPartie from "./screens/ChoixPartie";
 import Histoire from "./screens/Histoire";
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import game from './reducers/game'; 
+import ActionsGpt from './Gpt-components/ActionsGpt';
 
 import {
   useFonts,
@@ -24,6 +29,14 @@ import {
 } from "@expo-google-fonts/league-spartan";
 
 const Stack = createNativeStackNavigator();
+
+
+const store = configureStore({
+  reducer: {
+    game, // Ajoutez votre reducer au magasin
+  },
+});
+
 
 export default function App() {
   let [fontsLoaded, fontError] = useFonts({
@@ -37,6 +50,7 @@ export default function App() {
   }
 
   return (
+    <Provider store={store}>
     <NavigationContainer>
       <StatusBar hidden={false} />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -52,7 +66,11 @@ export default function App() {
         <Stack.Screen name="PartieDetail" component={PartieDetail} />
         <Stack.Screen name="ChoixPartie" component={ChoixPartie} />
         <Stack.Screen name="Histoire" component={Histoire} />
+        <ActionsGpt />
+       
       </Stack.Navigator>
     </NavigationContainer>
+    </Provider>
   );
 }
+
