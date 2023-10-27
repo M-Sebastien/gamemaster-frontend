@@ -1,20 +1,24 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import game from './reducers/game'; // Assurez-vous d'importer correctement votre reducer
+import ActionsGpt from './Gpt-components/ActionsGpt';
+
+const store = configureStore({
+  reducer: {
+    game, // Ajoutez votre reducer au magasin
+  },
+});
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Provider store={store}>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <ActionsGpt />
+      </View>
+    </Provider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
