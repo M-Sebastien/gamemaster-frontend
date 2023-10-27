@@ -2,7 +2,7 @@ export  const useFetchGpt = async (message, token = 300, msgSysteme = "") => {
 
 
   
-  const apiKey = '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'; // clef api
+const apiKey = process.env.OPENAI_API_KEY;; // clef api
   let requestData = {
       model: 'gpt-3.5-turbo',
       messages:  [
