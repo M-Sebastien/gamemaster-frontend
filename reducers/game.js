@@ -2,14 +2,14 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   context: {
-    title:"",
+    title: "",
     initialStory: '',
     players: [], // Supprimez la valeur initiale ici
     onbordingData: [], // Ajoutez un tableau pour sauvegarder les choix des utilisateurs
   },
   story: [
     {
-      turn: Number, 
+      turn: Number,
       player: { name: '', character: '' },
       story: '',
       choices: [],
@@ -26,7 +26,7 @@ const gameSlice = createSlice({
     addPlayer: (state, action) => {
       state.context.players.push(action.payload);
     },
-    
+
     // Action pour supprimer un joueur du jeu
     removePlayer: (state, action) => {
       state.context.players = state.context.players.filter(player => player !== action.payload);
@@ -36,7 +36,7 @@ const gameSlice = createSlice({
     updateStory: (state, action) => {
       state.story[0].story = action.payload;
     },
-   
+
     // Action pour ajouter une action
     addAction: (state, action) => {
       state.story[0].action.push(action.payload);
@@ -46,11 +46,11 @@ const gameSlice = createSlice({
     saveOnbordingData: (state, action) => {
       state.context.onbordingData = action.payload;
     },
-    
+
   },
 });
 
-export const { addPlayer, removePlayer, updateStory, addAction, saveOnbordingData } = gameSlice.action;
+export const { addPlayer, removePlayer, updateStory, addAction, saveOnbordingData } = gameSlice.actions;
 export default gameSlice.reducer;
 
 

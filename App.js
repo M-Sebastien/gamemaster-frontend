@@ -17,8 +17,6 @@ import BulletPoint from "./screens/BulletPoint";
 import PartieDetail from "./screens/PartieDetail";
 import ChoixPartie from "./screens/ChoixPartie";
 import Histoire from "./screens/Histoire";
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
 import game from './reducers/game';
 import ActionsGpt from './Gpt-components/ActionsGpt';
 
