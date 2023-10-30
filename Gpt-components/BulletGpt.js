@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import { useFetchGpt } from '../hooks/useFetchGpt';
 import { useSelector } from 'react-redux';
 
-function BulletGPT() {
+function BulletGpt() {
   const [response, setResponse] = useState("");
   const context = useSelector((state) => state.game.context);
 
@@ -31,5 +31,5 @@ function BulletGPT() {
   );
 }
 
-export default BulletGPT;
+export default BulletGpt;
 

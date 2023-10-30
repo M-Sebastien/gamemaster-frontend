@@ -1,6 +1,6 @@
 
 import React from "react";
-import { StatusBar } from "react-native";
+import { StatusBar, View } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -16,6 +16,7 @@ import BulletPoint from "./screens/BulletPoint";
 import PartieDetail from "./screens/PartieDetail";
 import ChoixPartie from "./screens/ChoixPartie";
 import Histoire from "./screens/Histoire";
+import ActionsHistoire from "./screens/ActionsHistoire";
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import game from './reducers/game'; 
@@ -50,12 +51,13 @@ export default function App() {
   }
 
   return (
+   
     <Provider store={store}>
-    <NavigationContainer>
+     <NavigationContainer>
       <StatusBar hidden={false} />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Menu" component={Menu} />
-        <Stack.Screen name="Connexion" component={Connexion} />
+         <Stack.Screen name="Connexion" component={Connexion} />
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="MesParties" component={MesParties} />
         <Stack.Screen name="CreationJoueurs" component={CreationJoueurs} />
@@ -66,7 +68,7 @@ export default function App() {
         <Stack.Screen name="PartieDetail" component={PartieDetail} />
         <Stack.Screen name="ChoixPartie" component={ChoixPartie} />
         <Stack.Screen name="Histoire" component={Histoire} />
-        <ActionsGpt />
+        <Stack.Screen name="ActionsHistoire" component={ActionsHistoire} />
        
       </Stack.Navigator>
     </NavigationContainer>

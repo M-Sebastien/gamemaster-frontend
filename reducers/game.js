@@ -2,14 +2,14 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   context: {
-    title:"",
+    title: "",
     initialStory: '',
     players: [], // Supprimez la valeur initiale ici
-    onbordingData: [], // Ajoutez un tableau pour sauvegarder les choix des utilisateurs
+    onboardingData: [], // Ajoutez un tableau pour sauvegarder les choix des utilisateurs
   },
   story: [
     {
-      turn: Number, 
+      turn: 0, // Valeur initiale du tour
       player: { name: '', character: '' },
       story: '',
       choices: [],
@@ -24,12 +24,12 @@ const gameSlice = createSlice({
   reducers: {
     // Action pour ajouter un joueur
     addPlayer: (state, action) => {
-      state.context.players.push(action.payload);
+      if (state.context.players.length < 5) {
+        state.context.players.push({ name: `Joueur ${state.context.players.length + 1}`, description: "" });
+      }
     },
-    
-    // Action pour supprimer un joueur du jeu
     removePlayer: (state, action) => {
-      state.context.players = state.context.players.filter(player => player !== action.payload);
+      state.context.players.splice(action.payload, 1);
     },
 
     // Action pour mettre à jour l'histoire
@@ -38,19 +38,23 @@ const gameSlice = createSlice({
     },
    
     // Action pour ajouter une action
-    addAction: (state, action) => {
+    updateAction: (state, action) => {
       state.story[0].action.push(action.payload);
     },
 
-    // Action pour sauvegarder les choix des utilisateurs
-    saveOnbordingData: (state, action) => {
-      state.context.onbordingData = action.payload;
+    updatePlayers: (state, action) => {
+      state.context.players = action.payload;
     },
-    
+
+    // Action pour sauvegarder les choix des utilisateurs
+    saveOnboardingData: (state, action) => {
+      state.story[0].choices.push(action.payload);
+    },
   },
 });
 
-export const { addPlayer, removePlayer, updateStory, addAction, saveOnbordingData } = gameSlice.action;
+export const { addPlayer, removePlayer, updateStory, addAction, saveOnboardingData, updatePlayers } = gameSlice.actions;
 export default gameSlice.reducer;
+
 
 

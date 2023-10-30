@@ -1,12 +1,23 @@
-import React from "react";
+import React, { useState} from "react";
+
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useDispatch } from "react-redux";
+import { saveOnboardingData } from "../reducers/game";
 import Logo from "../components/Logo";
 
 export default function ChoixDuree({ navigation }) {
+  const [duree, setDuree] = useState(null);
+  const dispatch = useDispatch()
   const handleDureeSelection = (duree) => {
-    // Vous pouvez utiliser la valeur 'duree' ici, par exemple, l'envoyer à votre backend ou la stocker dans l'état local
-    console.log("Durée sélectionnée:", duree);
+    
+    setDuree(duree);
   };
+
+  const Suivant = (duree) => {
+
+    dispatch(saveOnboardingData(duree))
+    navigation.navigate("ChoixPartie");
+  }
 
   return (
     <View style={styles.container}>
@@ -32,7 +43,7 @@ export default function ChoixDuree({ navigation }) {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.suivantButton}
-        onPress={() => navigation.navigate("ChoixStyle")}
+        onPress={ () => Suivant(duree)}
       >
         <Text style={styles.buttonText}>Suivant</Text>
       </TouchableOpacity>

@@ -1,12 +1,22 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useDispatch } from "react-redux";
 import Logo from "../components/Logo";
 
 export default function ChoixStyle({ navigation }) {
+ 
+  const [style, setStyle] = useState(null);
+  const dispatch = useDispatch()
   const handleStyleSelection = (style) => {
-    // Vous pouvez utiliser la valeur 'style' ici, par exemple, l'envoyer à votre backend ou la stocker dans l'état local
-    console.log("Style sélectionné:", style);
+    
+    setStyle(style);
   };
+
+  const Suivant = (style) => {
+    dispatch(saveOnboardingData(style))
+    navigation.navigate("ChoixUnivers")
+  }
+
 
   return (
     <View style={styles.container}>
@@ -32,7 +42,7 @@ export default function ChoixStyle({ navigation }) {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.suivantButton}
-        onPress={() => navigation.navigate("ChoixUnivers")}
+        onPress={Suivant}
       >
         <Text style={styles.buttonText}>Suivant</Text>
       </TouchableOpacity>

@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import { useFetchGpt } from '../hooks/useFetchGpt';
 import { useSelector } from 'react-redux';
 
-function JoueursGPT() {
+function JoueursGpt() {
   const [response, setResponse] = useState("");
   const context = useSelector((state) => state.game.context);
   const numberJoueur = useSelector((state) => state.game.context.players.length);
@@ -31,4 +31,4 @@ function JoueursGPT() {
   );
 }
 
-export default JoueursGPT;
+export default JoueursGpt;
