@@ -39,7 +39,6 @@ const gameSlice = createSlice({
     updateStory: (state, action) => {
       state.story[0].story = action.payload;
     },
-
     // Action pour ajouter une action
     updateAction: (state, action) => {
       state.story[0].action.push(action.payload);
