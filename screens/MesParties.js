@@ -27,7 +27,7 @@ const MesParties = () => {
     // Mettez en œuvre le code pour commencer la partie ici
     // Peut-être naviguer vers un écran de jeu ou effectuer d'autres actions nécessaires
     console.log("Partie commencée:", partieActuelle.titre);
-    navigation.navigate("ChoixDuree"); // Naviguer vers la page ChoixDurée
+    navigation.navigate("CreationJoueurs"); // Naviguer vers la page ChoixDurée
   };
 
   return (

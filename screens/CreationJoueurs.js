@@ -8,29 +8,50 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Logo from "../components/Logo";
+import { useDispatch } from "react-redux";
+import { updatePlayers } from "../reducers/game";
 
 const CreationJoueurs = ({ navigation }) => {
+  const dispatch = useDispatch();
   const [players, setPlayers] = useState([
-    { name: "Joueur 1", description: "" },
-    { name: "Joueur 2", description: "" },
+    { name: "Joueur 1", character: "" },
+    { name: "Joueur 2", character: "" },
   ]);
 
-  const handlePlayerNameChange = (text, index) => {
-    const newPlayers = [...players];
-    newPlayers[index].description = text;
-    setPlayers(newPlayers);
+  const handleChange = (index, value) => {
+    setPlayers(
+      players.map((player, i) =>
+        i === index ? { name: value, character: "" } : player
+      )
+    );
   };
 
-  const addPlayer = () => {
+  const addNewPlayer = () => {
     if (players.length < 5) {
       const newPlayers = [
         ...players,
-        { name: `Joueur ${players.length + 1}`, description: "" },
+        { name: `Joueur ${players.length + 1}`, character: "" },
       ];
       setPlayers(newPlayers);
     } else {
       alert("Le nombre maximum de joueurs est atteint (5 joueurs).");
     }
+  };
+
+  const handleRemovePlayer = () => {
+    if (players.length > 2) {
+      // Vérifie qu'il y a plus de 2 joueurs avant de supprimer
+      const newPlayers = [...players];
+      newPlayers.pop(); // Supprime le dernier joueur du tableau
+      setPlayers(newPlayers);
+    } else {
+      alert("Vous ne pouvez pas supprimer le dernier joueur.");
+    }
+  };
+  const handleGoButton = () => {
+    dispatch(updatePlayers(players));
+
+    navigation.navigate("ChoixDuree", { joueurs: players });
   };
 
   return (
@@ -44,18 +65,10 @@ const CreationJoueurs = ({ navigation }) => {
             style={styles.input}
             placeholder={`Joueur ${index + 1}`}
             value={player.description}
-            onChangeText={(text) => handlePlayerNameChange(text, index)}
+            onChangeText={() => handleChange()}
           />
           <View style={styles.iconsContainer}>
-            <TouchableOpacity onPress={() => handleSavePlayer(index)}>
-              <Icon
-                style={styles.addIcon}
-                name="check"
-                size={30}
-                color="#efefef"
-              />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => removePlayer(index)}>
+            <TouchableOpacity onPress={() => handleRemovePlayer(index)}>
               <Icon
                 style={styles.removeIcon}
                 name="times"
@@ -66,17 +79,10 @@ const CreationJoueurs = ({ navigation }) => {
           </View>
         </View>
       ))}
-      <TouchableOpacity onPress={addPlayer} style={styles.addButton}>
+      <TouchableOpacity onPress={addNewPlayer} style={styles.addButton}>
         <Text style={styles.addButtonText}>Ajouter un joueur</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() =>
-          navigation.navigate("BulletPoint", {
-            joueurs: players,
-          })
-        }
-      >
+      <TouchableOpacity style={styles.button} onPress={handleGoButton}>
         <Text style={styles.buttonText}>GO!</Text>
       </TouchableOpacity>
     </View>
@@ -88,7 +94,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#5D726F",
     alignItems: "center",
-    padding: 20,
   },
   intro: {
     fontFamily: "LeagueSpartan_700Bold",

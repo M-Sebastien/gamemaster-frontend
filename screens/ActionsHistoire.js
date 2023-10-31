@@ -1,8 +1,8 @@
 import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Logo from "../components/Logo";
 import { useDispatch } from "react-redux";
-import { updateStory } from "../reducers/game";
-import StoriesGpt from "../Gpt-components/StoriesGpt";
+import { updateAction } from "../reducers/game";
+import ActionsGpt from "../Gpt-components/ActionsGpt";
 
 export default function Histoire({ navigation }) {
   const dispatch = useDispatch()
@@ -10,8 +10,8 @@ export default function Histoire({ navigation }) {
 
   const Suivant = () => {
 
-    dispatch(updateStory)
-    navigation.navigate("ActionsHistoire");
+    dispatch(updateAction)
+    navigation.navigate("Histoire");
   }
 
   return (
@@ -19,7 +19,7 @@ export default function Histoire({ navigation }) {
       <Logo />
       <Text>Suite de l'histoire</Text>
       <Text>
-        <StoriesGpt />
+        <ActionsGpt />
       </Text>
       <TouchableOpacity
         style={styles.suivantButton}

@@ -12,6 +12,7 @@ const Logo = () => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: "row",
@@ -19,12 +20,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#efefef",
     width: "100%",
-    height: 100,
+    maxHeight: "15%", // Utilisation d'une unité relative pour la hauteur maximale
   },
   logo: {
-    marginTop: 40,
-    width: 200, // Ajustez la largeur de votre logo selon vos besoins
-    height: 60, // Ajustez la hauteur de votre logo selon vos besoins
+    marginTop: "8%", // Utilisation d'une unité relative pour l'espacement en haut
+    maxWidth: "70%", // Utilisation d'une unité relative pour la largeur maximale
+    maxHeight: "40%", // Utilisation d'une unité relative pour la hauteur maximale
   },
 });
 
