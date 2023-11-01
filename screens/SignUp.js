@@ -1,5 +1,10 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { signup } from "../reducers/user";
+
 import {
+  KeyboardAvoidingView,
+  Platform,
   View,
   Text,
   TextInput,
@@ -9,40 +14,76 @@ import {
 import Logo from "../components/Logo";
 
 const SignUp = ({ navigation }) => {
+  const dispatch = useDispatch();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
+
 
   const handleSignUp = () => {
-    console.log("Nom d'utilisateur:", username);
-    console.log("Mot de passe:", password);
-
-    navigation.navigate("CreationJoueurs");
+    // if (!username === "" && !password === "") { {
+    fetch("https://gamemaster-backend.vercel.app/users/signup", {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: username, password: password }),
+    })
+      .then(response => {
+        return response.json()
+      })
+      .then(data => {
+        if (data.result) {
+          dispatch(signup({ username: username, token: data.token }));
+          setUsername('');
+          setPassword('');
+          navigation.navigate("MesParties");
+        }
+      });
+    // } else {
+    //   setError(true);
+    //   console.log("error");
+    // }
   };
 
   return (
-    <View style={styles.container}>
-      <Logo />
-      <View style={styles.centerContainer}>
-        <Text style={styles.label}>Nom d'utilisateur</Text>
+    // Modifier le style de KeyboardAvoidingView si besoin
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
+      <View style={styles.container}>
+        <Logo />
+
+        <Text style={styles.label}>Nom d'utilisateur:</Text>
         <TextInput
-          style={styles.input}
-          placeholder="Entrez votre nom d'utilisateur"
-          onChangeText={(text) => setUsername(text)}
+          placeholder="Username"
+          autoCapitalize="none" // Tells TextInput to automatically capitalize certain characters.
+          keyboardType="default" // Determines which keyboard to open, e.g.numeric.
+          textContentType="username" // **iOS** Give the keyboard and the system information about the expected semantic meaning for the content that users enter.
+          autoComplete="username" // Specifies autocomplete hints for the system, so it can provide autofill.
+          onChangeText={(value) => setUsername(value)}
           value={username}
-        />
-        <Text style={styles.label}>Mot de passe</Text>
-        <TextInput
           style={styles.input}
-          placeholder="Entrez votre mot de passe"
-          onChangeText={(text) => setPassword(text)}
-          secureTextEntry // Masque le texte pour les mots de passe
-          value={password}
         />
+
+        <Text style={styles.label}>Mot de passe:</Text>
+        <TextInput
+          placeholder="Password"
+          secureTextEntry={true}
+          autoCapitalize="none" // Tells TextInput to automatically capitalize certain characters.
+          keyboardType="default" // Determines which keyboard to open, e.g.numeric.
+          textContentType="password" // **iOS** Give the keyboard and the system information about the expected semantic meaning for the content that users enter.
+          autoComplete="current-password" // Specifies autocomplete hints for the system, so it can provide autofill.
+          onChangeText={(value) => setPassword(value)}
+          value={password}
+          style={styles.input}
+        />
+
+        {error && <Text style={styles.error}>Merci de renseigner tous les champs</Text>}
+
         <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-          <Text style={styles.buttonText}>Se connecter</Text>
+          <Text style={styles.buttonText}>S'inscrire</Text>
         </TouchableOpacity>
+
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 

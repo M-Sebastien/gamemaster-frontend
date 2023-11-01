@@ -29,13 +29,11 @@ import {
   LeagueSpartan_700Bold,
 } from "@expo-google-fonts/league-spartan";
 
-
 const store = configureStore({
   reducer: { user, game }
 });
 
 const Stack = createNativeStackNavigator();
-
 
 export default function App() {
   let [fontsLoaded, fontError] = useFonts({
