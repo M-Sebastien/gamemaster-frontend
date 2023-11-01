@@ -20,10 +20,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#efefef",
     width: "100%",
-    maxHeight: "15%", // Utilisation d'une unité relative pour la hauteur maximale
+    maxHeight: "18%", // Utilisation d'une unité relative pour la hauteur maximale
   },
   logo: {
-    marginTop: "8%", // Utilisation d'une unité relative pour l'espacement en haut
+    marginTop: "10%", // Utilisation d'une unité relative pour l'espacement en haut
     maxWidth: "70%", // Utilisation d'une unité relative pour la largeur maximale
     maxHeight: "40%", // Utilisation d'une unité relative pour la hauteur maximale
   },

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  ScrollView,
   View,
   Text,
   TextInput,
@@ -55,10 +56,10 @@ const CreationJoueurs = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Logo />
-      <Text style={styles.intro}>Qui sont tes joueurs?</Text>
-      <Text style={styles.texte}>Prénoms</Text>
+      <Text style={styles.intro}>Quels sont les prénoms de tes joueurs?</Text>
+
       {players.map((player, index) => (
         <View key={index} style={styles.playerContainer}>
           <TextInput
@@ -72,20 +73,22 @@ const CreationJoueurs = ({ navigation }) => {
               <Icon
                 style={styles.removeIcon}
                 name="times"
-                size={30}
-                color="#efefef"
+                size={35}
+                color="#000000"
               />
             </TouchableOpacity>
           </View>
         </View>
       ))}
-      <TouchableOpacity onPress={addNewPlayer} style={styles.addButton}>
-        <Text style={styles.addButtonText}>Ajouter un joueur</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={handleGoButton}>
-        <Text style={styles.buttonText}>GO!</Text>
-      </TouchableOpacity>
-    </View>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity onPress={addNewPlayer} style={styles.addButton}>
+          <Text style={styles.addButtonText}>Ajouter un joueur</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleGoButton}>
+          <Text style={styles.buttonText}>GO!</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 };
 
@@ -93,57 +96,72 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#5D726F",
-    alignItems: "center",
   },
   intro: {
     fontFamily: "LeagueSpartan_700Bold",
     fontSize: 20,
-    color: "#efefef",
-    marginBottom: 20,
+    textAlign: "center",
+    lineHeight: 25,
+    justifyContent: "center",
+    paddingHorizontal: "10%",
+    paddingVertical: "5%",
+    marginTop: "4%",
   },
-  texte: {
-    fontFamily: "LeagueSpartan_500Medium",
-    fontSize: 18,
-    color: "#efefef",
-    marginBottom: 10,
-  },
+
   playerContainer: {
-    flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
-    justifyContent: "space-between",
-    marginVertical: 10,
-    width: "100%",
+    flexDirection: "row",
+    padding: "5%",
   },
   input: {
     flex: 1,
     minWidth: "70%",
-    minHeight: 40,
-    padding: 10,
+    minHeight: "5%",
+    padding: "5%",
     fontFamily: "LeagueSpartan_500Medium",
     fontSize: 16,
     backgroundColor: "#efefef",
-    borderRadius: 3,
+    borderRadius: 8,
+  },
+  iconsContainer: {
+    padding: "5%",
   },
   addButton: {
     backgroundColor: "#efefef",
-    paddingVertical: 12,
-    paddingHorizontal: 30,
+    paddingVertical: "5%",
+    paddingHorizontal: "15%",
     borderRadius: 8,
-    marginTop: 20,
+    marginTop: "7%",
+    elevation: "5%",
+    shadowColor: "#000",
+    shadowOpacity: "3%",
+    shadowOffset: { width: 0, height: 2 },
   },
   addButtonText: {
-    fontSize: 16,
+    fontFamily: "LeagueSpartan_700Bold",
+    fontSize: 18,
     fontWeight: "bold",
+  },
+  buttonContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: "10%",
   },
   button: {
     backgroundColor: "#efefef",
-    paddingVertical: 18,
-    paddingHorizontal: 50,
+    paddingVertical: "5%",
+    paddingHorizontal: "15%",
     borderRadius: 8,
-    marginTop: 20,
+    marginTop: "7%",
+    elevation: "5%",
+    shadowColor: "#000",
+    shadowOpacity: "3%",
+    shadowOffset: { width: 0, height: 2 },
   },
   buttonText: {
-    fontSize: 16,
+    fontFamily: "LeagueSpartan_700Bold",
+    fontSize: 18,
     fontWeight: "bold",
   },
 });

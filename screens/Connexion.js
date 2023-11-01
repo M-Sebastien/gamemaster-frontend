@@ -21,24 +21,26 @@ const Connexion = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Logo />
-      <Text style={styles.label}>Nom d'utilisateur:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Entrez votre nom d'utilisateur"
-        onChangeText={(text) => setUsername(text)}
-        value={username}
-      />
-      <Text style={styles.label}>Mot de passe:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Entrez votre mot de passe"
-        onChangeText={(text) => setPassword(text)}
-        secureTextEntry // Masque le texte pour les mots de passe
-        value={password}
-      />
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Se connecter</Text>
-      </TouchableOpacity>
+      <View style={styles.centerContainer}>
+        <Text style={styles.label}>Nom d'utilisateur</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Entrez votre nom d'utilisateur"
+          onChangeText={(text) => setUsername(text)}
+          value={username}
+        />
+        <Text style={styles.label}>Mot de passe</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Entrez votre mot de passe"
+          onChangeText={(text) => setPassword(text)}
+          secureTextEntry // Masque le texte pour les mots de passe
+          value={password}
+        />
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Se connecter</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -49,25 +51,39 @@ const styles = StyleSheet.create({
     backgroundColor: "#5D726F",
   },
   label: {
-    color: "#efefef",
-    fontSize: 16,
-    marginBottom: 10,
+    fontFamily: "LeagueSpartan_700Bold",
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: "5%",
+    marginTop: "5%",
   },
   input: {
     backgroundColor: "#efefef",
-    padding: 10,
+    paddingVertical: "5%",
+    paddingHorizontal: "15%",
     borderRadius: 8,
-    marginBottom: 20,
+    marginBottom: "4%",
+    fontFamily: "LeagueSpartan_500Medium",
+  },
+  centerContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: "20%",
   },
   button: {
     backgroundColor: "#efefef",
-    padding: 15,
+    paddingVertical: "5%",
+    paddingHorizontal: "15%",
     borderRadius: 8,
-    alignItems: "center",
+    marginTop: "7%",
+    elevation: "5%",
+    shadowColor: "#000",
+    shadowOpacity: "3%",
+    shadowOffset: { width: 0, height: 2 },
   },
   buttonText: {
     fontFamily: "LeagueSpartan_700Bold",
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
   },
 });
