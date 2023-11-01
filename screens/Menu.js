@@ -1,28 +1,21 @@
-import {
-  TouchableOpacity,
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-} from "react-native";
+import React from "react";
+import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
 import Logo from "../components/Logo";
-
-const { height } = Dimensions.get("window");
 
 export default function Menu({ navigation }) {
   return (
     <View style={styles.container}>
       <Logo />
-      <View style={[styles.introContainer, { height: (height * 1) / 4 }]}>
+      <View style={styles.introContainer}>
         <Text style={styles.intro}>
-          Desormais tu es le game master, tes choix vont influer sur les rôles
-          de chacuns ainsi que la suite de ton histoire.
+          Désormais tu es le game master, tes choix vont influer sur les rôles
+          de chacun ainsi que la suite de ton histoire.
         </Text>
       </View>
-      <View style={[styles.titreContainer, { height: (height * 1) / 5 }]}>
+      <View style={styles.titreContainer}>
         <Text style={styles.titre}>Entre dans l'histoire</Text>
       </View>
-      <View style={[styles.buttonContainer, { height: (height * 1) / 5 }]}>
+      <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate("Connexion")}
@@ -48,46 +41,42 @@ const styles = StyleSheet.create({
   intro: {
     fontFamily: "LeagueSpartan_700Bold",
     fontSize: 20,
-    textAlign: "center", // Centre le texte horizontalement
-    lineHeight: 30,
+    textAlign: "center",
+    lineHeight: 25,
     justifyContent: "center",
-    paddingHorizontal: 30,
-    paddingVertical: 40,
+    paddingHorizontal: "10%",
+    paddingVertical: "15%",
+    marginTop: "10%",
   },
   titre: {
     fontFamily: "LeagueSpartan_900Black",
-    fontSize: 36,
+    fontSize: 35,
     color: "#efefef",
-    textAlign: "center", // Centre le texte horizontalement
-    lineHeight: 50, // Espacement entre les lignes (ajuste selon ton besoin)
-    paddingVertical: 50,
-    paddingHorizontal: 5,
-    textShadowColor: "#000000", // Couleur du contour (noir)
-    textShadowOffset: { width: 1, height: 1 }, // Décalage du contour
-    textShadowRadius: 3, // Espacement du contour
+    textAlign: "center",
+    paddingVertical: "15%",
+    textShadowColor: "#000000",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
   },
-
   buttonContainer: {
-    padding: 20,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 120, // Réduit la marge supérieure pour déplacer les boutons vers le haut
+    marginBottom: "10%",
   },
   button: {
-    backgroundColor: "#efefef", // Couleur de fond verte
-    paddingVertical: 18, // Ajuste l'espacement interne
-    paddingHorizontal: 50, // Ajuste l'espacement interne
+    backgroundColor: "#efefef",
+    paddingVertical: "5%",
+    paddingHorizontal: "15%",
     borderRadius: 8,
-    marginTop: 20,
-    elevation: 3, // Ombre pour l'effet de profondeur (Android)
-    shadowColor: "#000", // Couleur de l'ombre (iOS)
-    shadowOpacity: 0.5, // Opacité de l'ombre (iOS)
-    shadowOffset: { width: 0, height: 4 }, // Décalage de l'ombre (iOS)
+    marginTop: "7%",
+    elevation: "5%",
+    shadowColor: "#000",
+    shadowOpacity: "3%",
+    shadowOffset: { width: 0, height: 2 },
   },
   buttonText: {
     fontFamily: "LeagueSpartan_700Bold",
-
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
   },
 });

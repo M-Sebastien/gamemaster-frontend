@@ -16,50 +16,52 @@ import Footer from "../components/Footer";
 export default function Connexion({ navigation }) {
   const dispatch = useDispatch();
 
-  const [signInUsername, setSignInUsername] = useState("");
-  const [signInPassword, setSignInPassword] = useState("");
-  const [signInError, setSignInError] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
 
   const handleConnection = () => {
-    // if (!signInUsername === "" && !signInPassword === "") {
+    // if (!username === "" && !password === "") {
     fetch("https://gamemaster-backend.vercel.app/users/signin", {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: signInUsername, password: signInPassword }),
+      body: JSON.stringify({ username: username, password: password }),
     }).then(response => {
       return response.json()
     })
       .then(data => {
         if (data.result) {
-          dispatch(signin({ username: signInUsername, token: data.token }));
-          setSignInUsername('');
-          setSignInPassword('');
-          navigation.navigate("MenuJoueur");
+          dispatch(signin({ username: username, token: data.token }));
+          setUsername('');
+          setPassword('');
+          navigation.navigate("MesParties");
         }
       });
     // } else {
-    //   setSignInError(true);
+    //   setError(true);
     //   console.log("error");
     // }
   };
 
   return (
-    // This component will automatically adjust its height, position, or bottom padding based on the keyboard height to remain visible while the virtual keyboard is displayed.
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
       <View style={styles.container}>
         <Logo />
-        <View style={styles.inputContainer}>
+        <View style={styles.centerContainer}>
+
+          <Text style={styles.label}>Nom d'utilisateur</Text>
           <TextInput
             placeholder="Username"
             autoCapitalize="none" // Tells TextInput to automatically capitalize certain characters.
             keyboardType="default" // Determines which keyboard to open, e.g.numeric.
             textContentType="username" // **iOS** Give the keyboard and the system information about the expected semantic meaning for the content that users enter.
             autoComplete="username" // Specifies autocomplete hints for the system, so it can provide autofill.
-            onChangeText={(value) => setSignInUsername(value)}
-            value={signInUsername}
+            onChangeText={(value) => setUsername(value)}
+            value={username}
             style={styles.input}
           />
 
+          <Text style={styles.label}>Mot de passe</Text>
           <TextInput
             placeholder="Password"
             secureTextEntry={true}
@@ -67,18 +69,18 @@ export default function Connexion({ navigation }) {
             keyboardType="default" // Determines which keyboard to open, e.g.numeric.
             textContentType="password" // **iOS** Give the keyboard and the system information about the expected semantic meaning for the content that users enter.
             autoComplete="current-password" // Specifies autocomplete hints for the system, so it can provide autofill.
-            onChangeText={(value) => setSignInPassword(value)}
-            value={signInPassword}
+            onChangeText={(value) => setPassword(value)}
+            value={password}
             style={styles.input}
           />
 
-          {signInError && <Text style={styles.error}>Merci de renseigner tous les champs</Text>}
+          {error && <Text style={styles.error}>Merci de renseigner tous les champs</Text>}
 
-          <TouchableOpacity onPress={() => handleConnection()} style={styles.button} activeOpacity={0.8}>
-            <Text style={styles.textButton}>Me connecter</Text>
+          <TouchableOpacity style={styles.button} onPress={handleLogin}>
+            <Text style={styles.buttonText}>Se connecter</Text>
           </TouchableOpacity>
+
         </View>
-        <Footer />
       </View>
     </KeyboardAvoidingView>
   );
@@ -92,26 +94,40 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: "#5D726F",
   },
-  inputContainer: {
-    width: '85%',
-    backgroundColor: "#ffffff",
-    padding: 30,
-    borderRadius: 1,
+  label: {
+    fontFamily: "LeagueSpartan_700Bold",
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: "5%",
+    marginTop: "5%",
   },
   input: {
-    width: '100%',
-    borderBottomColor: '#000000',
-    borderBottomWidth: 1,
-    fontSize: 16,
+    backgroundColor: "#efefef",
+    paddingVertical: "5%",
+    paddingHorizontal: "15%",
+    borderRadius: 8,
+    marginBottom: "4%",
+    fontFamily: "LeagueSpartan_500Medium",
+  },
+  centerContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: "20%",
   },
   button: {
-    // alignItems: 'center',
-    // paddingTop: 8,
-    // width: '100%',
-    // marginTop: 30,
-    // backgroundColor: '#fbe29c',
-    // borderRadius: 1,
-    fontSize: 17,
+    backgroundColor: "#efefef",
+    paddingVertical: "5%",
+    paddingHorizontal: "15%",
+    borderRadius: 8,
+    marginTop: "7%",
+    elevation: "5%",
+    shadowColor: "#000",
+    shadowOpacity: "3%",
+    shadowOffset: { width: 0, height: 2 },
+  },
+  buttonText: {
+    fontFamily: "LeagueSpartan_700Bold",
+    fontSize: 18,
     fontWeight: "bold",
     backgroundColor: "#e8e8e8",
     color: "#000000",
@@ -124,10 +140,6 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
   textButton: {
-    // fontFamily: 'LeagueSpartan_700Bold',
-    // height: 30,
-    // fontWeight: '700',
-    // fontSize: 16,
     fontSize: 17,
     fontWeight: "bold",
     color: "#000000",

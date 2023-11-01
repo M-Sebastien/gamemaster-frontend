@@ -1,69 +1,94 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
 import Logo from "../components/Logo";
+import { saveOnboardingData } from "../reducers/game";
 
-const BulletPoint = ({ route, navigation }) => {
-  const { joueurs } = route.params;
+const joueurs = [
+  { id: 1, name: "Joueur 1", description: "Description du joueur 1" },
+  { id: 2, name: "Joueur 2", description: "Description du joueur 2" },
+  // Ajoute autant de joueurs que nécessaire
+];
 
-  const navigateToPartieDetail = () => {
-    // Naviguer vers la page PartieDetail.js
+export default function BulletPoint() {
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+
+  const entrerDansLhistoire = (joueur) => {
+    dispatch(saveOnboardingData(joueur));
     navigation.navigate("PartieDetail");
   };
 
   return (
     <View style={styles.container}>
       <Logo />
-      <Text style={styles.title}>Description des joueurs</Text>
-      {joueurs.map((joueur, index) => (
-        <View key={index} style={styles.joueurContainer}>
-          <Text style={styles.joueurName}>{joueur.name}</Text>
-          <Text style={styles.joueurDescription}>{joueur.description}</Text>
+      <Text style={styles.intro}>Voici tes joueurs</Text>
+      <View style={styles.cardContainer}>
+        <View style={styles.card}>
+          <Text>Mon nom</Text>
+          <Text>Ma description</Text>
         </View>
-      ))}
-      <TouchableOpacity onPress={navigateToPartieDetail} style={styles.button}>
-        <Text style={styles.buttonText}>Entrer dans l'histoire</Text>
-      </TouchableOpacity>
+      </View>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("PartieDetail")}
+        >
+          <Text style={styles.buttonText}>Entrer dans l'histoire</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#5D726F",
   },
-  title: {
+  intro: {
     fontFamily: "LeagueSpartan_700Bold",
     fontSize: 20,
-    color: "#efefef",
-    marginBottom: 20,
+    textAlign: "center",
+    lineHeight: 25,
+    justifyContent: "center",
+    paddingHorizontal: "10%",
+    paddingVertical: "5%",
+    marginTop: "4%",
   },
-  joueurContainer: {
+  buttonContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: "10%",
+  },
+  cardContainer: {
     width: "100%",
-    marginBottom: 20,
+    alignItems: "center",
   },
-  joueurName: {
-    fontFamily: "LeagueSpartan_700Bold",
-    fontSize: 18,
-    color: "#efefef",
-    marginBottom: 10,
-  },
-  joueurDescription: {
+  card: {
     fontFamily: "LeagueSpartan_500Medium",
-    fontSize: 16,
-    color: "#efefef",
+    fontSize: 20,
+    backgroundColor: "#efefef",
+    padding: "5%",
+    borderRadius: 8,
+    marginBottom: "5%",
+    width: "90%", // ou toute autre largeur souhaitée
   },
   button: {
     backgroundColor: "#efefef",
-    paddingVertical: 18,
-    paddingHorizontal: 50,
+    paddingVertical: "5%",
+    paddingHorizontal: "15%",
     borderRadius: 8,
-    marginTop: 20,
+    marginTop: "7%",
+    elevation: "5%",
+    shadowColor: "#000",
+    shadowOpacity: "3%",
+    shadowOffset: { width: 0, height: 2 },
   },
   buttonText: {
-    fontSize: 16,
+    fontFamily: "LeagueSpartan_700Bold",
+    fontSize: 18,
     fontWeight: "bold",
   },
 });
-
-export default BulletPoint;

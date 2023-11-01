@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { useFetchGpt } from "../hooks/useFetchGpt";
 import { useDispatch, useSelector } from "react-redux";
 
-function StoriesGPT() {
+function StoriesGpt() {
   const [response, setResponse] = useState("");
   const dispatch = useDispatch();
 
@@ -39,4 +39,4 @@ function StoriesGPT() {
   );
 }
 
-export default StoriesGPT;
+export default StoriesGpt;

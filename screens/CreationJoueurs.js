@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  ScrollView,
   View,
   Text,
   TextInput,
@@ -8,24 +9,29 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Logo from "../components/Logo";
+import { useDispatch } from "react-redux";
+import { updatePlayers } from "../reducers/game";
 
 const CreationJoueurs = ({ navigation }) => {
+  const dispatch = useDispatch();
   const [players, setPlayers] = useState([
-    { name: "Joueur 1", description: "" },
-    { name: "Joueur 2", description: "" },
+    { name: "Joueur 1", character: "" },
+    { name: "Joueur 2", character: "" },
   ]);
 
-  const handlePlayerNameChange = (text, index) => {
-    const newPlayers = [...players];
-    newPlayers[index].description = text;
-    setPlayers(newPlayers);
+  const handleChange = (index, value) => {
+    setPlayers(
+      players.map((player, i) =>
+        i === index ? { name: value, character: "" } : player
+      )
+    );
   };
 
-  const addPlayer = () => {
+  const addNewPlayer = () => {
     if (players.length < 5) {
       const newPlayers = [
         ...players,
-        { name: `Joueur ${players.length + 1}`, description: "" },
+        { name: `Joueur ${players.length + 1}`, character: "" },
       ];
       setPlayers(newPlayers);
     } else {
@@ -33,53 +39,56 @@ const CreationJoueurs = ({ navigation }) => {
     }
   };
 
+  const handleRemovePlayer = () => {
+    if (players.length > 2) {
+      // Vérifie qu'il y a plus de 2 joueurs avant de supprimer
+      const newPlayers = [...players];
+      newPlayers.pop(); // Supprime le dernier joueur du tableau
+      setPlayers(newPlayers);
+    } else {
+      alert("Vous ne pouvez pas supprimer le dernier joueur.");
+    }
+  };
+  const handleGoButton = () => {
+    dispatch(updatePlayers(players));
+
+    navigation.navigate("ChoixDuree", { joueurs: players });
+  };
+
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Logo />
-      <Text style={styles.intro}>Qui sont tes joueurs?</Text>
-      <Text style={styles.texte}>Prénoms</Text>
+      <Text style={styles.intro}>Quels sont les prénoms de tes joueurs?</Text>
+
       {players.map((player, index) => (
         <View key={index} style={styles.playerContainer}>
           <TextInput
             style={styles.input}
             placeholder={`Joueur ${index + 1}`}
             value={player.description}
-            onChangeText={(text) => handlePlayerNameChange(text, index)}
+            onChangeText={() => handleChange()}
           />
           <View style={styles.iconsContainer}>
-            <TouchableOpacity onPress={() => handleSavePlayer(index)}>
-              <Icon
-                style={styles.addIcon}
-                name="check"
-                size={30}
-                color="#efefef"
-              />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => removePlayer(index)}>
+            <TouchableOpacity onPress={() => handleRemovePlayer(index)}>
               <Icon
                 style={styles.removeIcon}
                 name="times"
-                size={30}
-                color="#efefef"
+                size={35}
+                color="#000000"
               />
             </TouchableOpacity>
           </View>
         </View>
       ))}
-      <TouchableOpacity onPress={addPlayer} style={styles.addButton}>
-        <Text style={styles.addButtonText}>Ajouter un joueur</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() =>
-          navigation.navigate("BulletPoint", {
-            joueurs: players,
-          })
-        }
-      >
-        <Text style={styles.buttonText}>GO!</Text>
-      </TouchableOpacity>
-    </View>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity onPress={addNewPlayer} style={styles.addButton}>
+          <Text style={styles.addButtonText}>Ajouter un joueur</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleGoButton}>
+          <Text style={styles.buttonText}>GO!</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 };
 
@@ -87,58 +96,72 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#5D726F",
-    alignItems: "center",
-    padding: 20,
   },
   intro: {
     fontFamily: "LeagueSpartan_700Bold",
     fontSize: 20,
-    color: "#efefef",
-    marginBottom: 20,
+    textAlign: "center",
+    lineHeight: 25,
+    justifyContent: "center",
+    paddingHorizontal: "10%",
+    paddingVertical: "5%",
+    marginTop: "4%",
   },
-  texte: {
-    fontFamily: "LeagueSpartan_500Medium",
-    fontSize: 18,
-    color: "#efefef",
-    marginBottom: 10,
-  },
+
   playerContainer: {
-    flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
-    justifyContent: "space-between",
-    marginVertical: 10,
-    width: "100%",
+    flexDirection: "row",
+    padding: "5%",
   },
   input: {
     flex: 1,
     minWidth: "70%",
-    minHeight: 40,
-    padding: 10,
+    minHeight: "5%",
+    padding: "5%",
     fontFamily: "LeagueSpartan_500Medium",
     fontSize: 16,
     backgroundColor: "#efefef",
-    borderRadius: 3,
+    borderRadius: 8,
+  },
+  iconsContainer: {
+    padding: "5%",
   },
   addButton: {
     backgroundColor: "#efefef",
-    paddingVertical: 12,
-    paddingHorizontal: 30,
+    paddingVertical: "5%",
+    paddingHorizontal: "15%",
     borderRadius: 8,
-    marginTop: 20,
+    marginTop: "7%",
+    elevation: "5%",
+    shadowColor: "#000",
+    shadowOpacity: "3%",
+    shadowOffset: { width: 0, height: 2 },
   },
   addButtonText: {
-    fontSize: 16,
+    fontFamily: "LeagueSpartan_700Bold",
+    fontSize: 18,
     fontWeight: "bold",
+  },
+  buttonContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: "10%",
   },
   button: {
     backgroundColor: "#efefef",
-    paddingVertical: 18,
-    paddingHorizontal: 50,
+    paddingVertical: "5%",
+    paddingHorizontal: "15%",
     borderRadius: 8,
-    marginTop: 20,
+    marginTop: "7%",
+    elevation: "5%",
+    shadowColor: "#000",
+    shadowOpacity: "3%",
+    shadowOffset: { width: 0, height: 2 },
   },
   buttonText: {
-    fontSize: 16,
+    fontFamily: "LeagueSpartan_700Bold",
+    fontSize: 18,
     fontWeight: "bold",
   },
 });

@@ -27,26 +27,28 @@ const MesParties = () => {
     // Mettez en œuvre le code pour commencer la partie ici
     // Peut-être naviguer vers un écran de jeu ou effectuer d'autres actions nécessaires
     console.log("Partie commencée:", partieActuelle.titre);
-    navigation.navigate("ChoixDuree"); // Naviguer vers la page ChoixDurée
+    navigation.navigate("CreationJoueurs"); // Naviguer vers la page ChoixDurée
   };
 
   return (
     <View style={styles.container}>
       <Logo />
-      {partieActuelle ? (
-        <View style={styles.partieContainer}>
-          <Text style={styles.titrePartie}>{partieActuelle.titre}</Text>
-        </View>
-      ) : (
-        <Text>Aucune partie enregistrée.</Text>
-      )}
-      <TouchableOpacity
-        style={styles.button}
-        onPress={commencerPartie}
-        disabled={!partieActuelle}
-      >
-        <Text style={styles.buttonText}>Commencer la partie</Text>
-      </TouchableOpacity>
+      <View style={styles.centerContainer}>
+        {partieActuelle ? (
+          <View style={styles.partieContainer}>
+            <Text style={styles.titrePartie}>{partieActuelle.titre}</Text>
+          </View>
+        ) : (
+          <Text>Aucune partie enregistrée.</Text>
+        )}
+        <TouchableOpacity
+          style={styles.button}
+          onPress={commencerPartie}
+          disabled={!partieActuelle}
+        >
+          <Text style={styles.buttonText}>Commencer la partie</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -57,28 +59,39 @@ const styles = StyleSheet.create({
     backgroundColor: "#5D726F",
   },
   partieContainer: {
+    textAlign: "center",
     backgroundColor: "#efefef",
-    padding: 20,
+    paddingVertical: "5%",
+    paddingHorizontal: "15%",
     borderRadius: 8,
-    marginBottom: 20,
-    marginTop: 50,
-    alignItems: "center",
-    justifyContent: "space-between",
+    marginBottom: "4%",
   },
   titrePartie: {
     fontFamily: "LeagueSpartan_700Bold",
-    fontSize: 20,
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  centerContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: "20%", // 20% de la hauteur de l'écran
   },
   button: {
     backgroundColor: "#efefef",
-    padding: 15,
+    paddingVertical: "5%",
+    paddingHorizontal: "15%",
     borderRadius: 8,
-    alignItems: "center",
+    marginTop: "7%",
+    elevation: "5%",
+    shadowColor: "#000",
+    shadowOpacity: "3%",
+    shadowOffset: { width: 0, height: 2 },
   },
   buttonText: {
     fontFamily: "LeagueSpartan_700Bold",
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
+    textAlign: "center",
   },
 });
 

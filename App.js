@@ -1,6 +1,5 @@
-
 import React from "react";
-import { StatusBar } from "react-native";
+import { StatusBar, View } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -8,7 +7,6 @@ import Menu from "./screens/Menu";
 import Connexion from "./screens/Connexion";
 import SignUp from "./screens/SignUp";
 import MesParties from "./screens/MesParties";
-import Register from "./screens/Register";
 import CreationJoueurs from "./screens/CreationJoueurs";
 import ChoixDuree from "./screens/ChoixDuree";
 import ChoixStyle from "./screens/ChoixStyle";
@@ -17,12 +15,13 @@ import BulletPoint from "./screens/BulletPoint";
 import PartieDetail from "./screens/PartieDetail";
 import ChoixPartie from "./screens/ChoixPartie";
 import Histoire from "./screens/Histoire";
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
-import game from './reducers/game';
-import ActionsGpt from './Gpt-components/ActionsGpt';
+import ActionsHistoire from "./screens/ActionsHistoire";
+import { Provider } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
+import game from "./reducers/game";
+import user from './reducers/user';
+import ActionsGpt from "./Gpt-components/ActionsGpt";
 
-import MenuJoueur from "./screens/MenuJoueur";
 import {
   useFonts,
   LeagueSpartan_900Black,
@@ -30,23 +29,12 @@ import {
   LeagueSpartan_700Bold,
 } from "@expo-google-fonts/league-spartan";
 
-// redux imports
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
-import user from './reducers/user';
 
 const store = configureStore({
-  reducer: { user }
+  reducer: { user, game }
 });
 
 const Stack = createNativeStackNavigator();
-
-
-// const store = configureStore({
-//   reducer: {
-//     game, // Ajoutez votre reducer au magasin
-//   },
-// });
 
 
 export default function App() {
@@ -77,11 +65,9 @@ export default function App() {
           <Stack.Screen name="PartieDetail" component={PartieDetail} />
           <Stack.Screen name="ChoixPartie" component={ChoixPartie} />
           <Stack.Screen name="Histoire" component={Histoire} />
-          <ActionsGpt />
-
+          <Stack.Screen name="ActionsHistoire" component={ActionsHistoire} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
   );
 }
-
