@@ -34,7 +34,7 @@ export default function Connexion({ navigation }) {
           dispatch(signin({ username: signInUsername, token: data.token }));
           setSignInUsername('');
           setSignInPassword('');
-          navigation.navigate("MenuJoueur");
+          navigation.navigate("ActionsHistoire");
         }
       });
     // } else {
