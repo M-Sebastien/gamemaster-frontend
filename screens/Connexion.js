@@ -105,12 +105,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   button: {
-    // alignItems: 'center',
-    // paddingTop: 8,
-    // width: '100%',
-    // marginTop: 30,
-    // backgroundColor: '#fbe29c',
-    // borderRadius: 1,
     fontSize: 17,
     fontWeight: "bold",
     backgroundColor: "#e8e8e8",
@@ -124,10 +118,6 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
   textButton: {
-    // fontFamily: 'LeagueSpartan_700Bold',
-    // height: 30,
-    // fontWeight: '700',
-    // fontSize: 16,
     fontSize: 17,
     fontWeight: "bold",
     color: "#000000",
