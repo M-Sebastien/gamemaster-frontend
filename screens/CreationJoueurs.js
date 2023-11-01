@@ -58,7 +58,7 @@ const CreationJoueurs = ({ navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <Logo />
-      <Text style={styles.intro}>Quels sont les prénoms de tes joueurs?</Text>
+      <Text style={styles.intro}>Quels sont les prénoms de vos joueurs?</Text>
 
       {players.map((player, index) => (
         <View key={index} style={styles.playerContainer}>
@@ -106,6 +106,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: "10%",
     paddingVertical: "5%",
     marginTop: "4%",
+    textShadowColor: "#efefef",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
   },
 
   playerContainer: {

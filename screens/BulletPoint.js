@@ -1,5 +1,11 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import Logo from "../components/Logo";
@@ -21,13 +27,13 @@ export default function BulletPoint() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Logo />
-      <Text style={styles.intro}>Voici tes joueurs</Text>
+      <Text style={styles.intro}>Voici vos personnages</Text>
       <View style={styles.cardContainer}>
         <View style={styles.card}>
-          <Text>Mon nom</Text>
-          <Text>Ma description</Text>
+          <Text>Nom du perso</Text>
+          <Text>Description</Text>
         </View>
       </View>
       <View style={styles.buttonContainer}>
@@ -35,10 +41,10 @@ export default function BulletPoint() {
           style={styles.button}
           onPress={() => navigation.navigate("PartieDetail")}
         >
-          <Text style={styles.buttonText}>Entrer dans l'histoire</Text>
+          <Text style={styles.buttonText}>Entrez dans l'histoire</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -56,6 +62,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: "10%",
     paddingVertical: "5%",
     marginTop: "4%",
+    textShadowColor: "#efefef",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
   },
   buttonContainer: {
     justifyContent: "center",

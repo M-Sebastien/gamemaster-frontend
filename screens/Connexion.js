@@ -8,10 +8,9 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import Logo from "../components/Logo";
-import Footer from "../components/Footer";
 
 export default function Connexion({ navigation }) {
   const dispatch = useDispatch();
@@ -20,20 +19,21 @@ export default function Connexion({ navigation }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
 
-  const handleConnection = () => {
+  const handleLogin = () => {
     // if (!username === "" && !password === "") {
     fetch("https://gamemaster-backend.vercel.app/users/signin", {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username: username, password: password }),
-    }).then(response => {
-      return response.json()
     })
-      .then(data => {
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
         if (data.result) {
           dispatch(signin({ username: username, token: data.token }));
-          setUsername('');
-          setPassword('');
+          setUsername("");
+          setPassword("");
           navigation.navigate("MesParties");
         }
       });
@@ -44,11 +44,13 @@ export default function Connexion({ navigation }) {
   };
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
       <View style={styles.container}>
         <Logo />
         <View style={styles.centerContainer}>
-
           <Text style={styles.label}>Nom d'utilisateur</Text>
           <TextInput
             placeholder="Username"
@@ -74,24 +76,26 @@ export default function Connexion({ navigation }) {
             style={styles.input}
           />
 
-          {error && <Text style={styles.error}>Merci de renseigner tous les champs</Text>}
+          {error && (
+            <Text style={styles.error}>
+              Merci de renseigner tous les champs
+            </Text>
+          )}
 
           <TouchableOpacity style={styles.button} onPress={handleLogin}>
             <Text style={styles.buttonText}>Se connecter</Text>
           </TouchableOpacity>
-
         </View>
       </View>
     </KeyboardAvoidingView>
   );
-
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: "#5D726F",
   },
   label: {
@@ -146,6 +150,6 @@ const styles = StyleSheet.create({
   },
   error: {
     marginTop: 10,
-    color: 'red',
+    color: "red",
   },
 });
