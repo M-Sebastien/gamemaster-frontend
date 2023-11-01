@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux"; // Importez useNavigation depuis React Navigation
 import Logo from "../components/Logo";
+import { saveOnboardingData } from "../reducers/game";
 
 export default function ChoixUnivers() {
   const dispatch = useDispatch()

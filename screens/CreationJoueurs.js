@@ -1,67 +1,69 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Logo from "../components/Logo";
 import { useDispatch } from "react-redux";
-import { updatePlayers} from  "../reducers/game";
+import { updatePlayers } from "../reducers/game";
+
 
 const CreationJoueurs = ({ navigation }) => {
   const dispatch = useDispatch();
+
   const [players, setPlayers] = useState([
-    { name: "Joueur 1", character: "" },
-    { name: "Joueur 2", character: "" },
+    { name: "", character: "" },
+    { name: "", character: "" },
   ]);
 
   const handleChange = (index, value) => {
-    setPlayers(players.map((player, i) => i === index ? {name: value, character:''} : player ))
-    }
+    const updatedPlayers = [...players];
+    updatedPlayers[index] = { name: value, character: '' };
+    setPlayers(updatedPlayers);
+  };
 
   const addNewPlayer = () => {
     if (players.length < 5) {
-      const newPlayers = [
-        ...players,
-        { name: `Joueur ${players.length + 1}`, character: "" },
-      ];
-      setPlayers(newPlayers);
+      setPlayers([...players, { name: `Joueur ${players.length + 1}`, character: "" }]);
     } else {
       alert("Le nombre maximum de joueurs est atteint (5 joueurs).");
     }
   };
 
   const handleRemovePlayer = () => {
-    if (players.length > 2) { // Vérifie qu'il y a plus de 2 joueurs avant de supprimer
-      const newPlayers = [...players];
-      newPlayers.pop(); // Supprime le dernier joueur du tableau
-      setPlayers(newPlayers);
+    if (players.length > 2) {
+      const updatedPlayers = [...players];
+      updatedPlayers.pop();
+      setPlayers(updatedPlayers);
     } else {
       alert("Vous ne pouvez pas supprimer le dernier joueur.");
     }
   };
-  const handleGoButton = () => {
-   
-    dispatch(updatePlayers(players));
-    
-    navigation.navigate("ChoixDuree", { joueurs: players });
+
+
+ 
+
+  const handleGoButton = async () => {
+    try {
+      
+      dispatch(updatePlayers(players));
+      navigation.navigate("ChoixDuree");
+    } catch (error) {
+      console.error("Une erreur s'est produite :", error);
+      // Gérer l'erreur si nécessaire
+    }
   };
 
   return (
     <View style={styles.container}>
       <Logo />
-      <Text style={styles.intro}>Qui sont tes joueurs?</Text>
+      <Text style={styles.intro}>Qui sont tes joueurs ?</Text>
       <Text style={styles.texte}>Prénoms</Text>
       {players.map((player, index) => (
         <View key={index} style={styles.playerContainer}>
           <TextInput
             style={styles.input}
             placeholder={`Joueur ${index + 1}`}
-            value={player.description}
-            onChangeText={ () => handleChange()}
+            value={player.name}
+            onChangeText={(text) => handleChange(index, text)}
           />
           <View style={styles.iconsContainer}>
             <TouchableOpacity onPress={() => handleRemovePlayer(index)}>
@@ -78,11 +80,8 @@ const CreationJoueurs = ({ navigation }) => {
       <TouchableOpacity onPress={addNewPlayer} style={styles.addButton}>
         <Text style={styles.addButtonText}>Ajouter un joueur</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleGoButton}
-      >
-        <Text style={styles.buttonText}>GO!</Text>
+      <TouchableOpacity style={styles.button} onPress={handleGoButton}>
+        <Text style={styles.buttonText}>GO !</Text>
       </TouchableOpacity>
     </View>
   );

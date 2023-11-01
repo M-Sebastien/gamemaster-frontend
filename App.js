@@ -20,7 +20,6 @@ import ActionsHistoire from "./screens/ActionsHistoire";
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import game from './reducers/game'; 
-import ActionsGpt from './Gpt-components/ActionsGpt';
 
 import {
   useFonts,
@@ -62,11 +61,11 @@ export default function App() {
         <Stack.Screen name="MesParties" component={MesParties} />
         <Stack.Screen name="CreationJoueurs" component={CreationJoueurs} />
         <Stack.Screen name="ChoixDuree" component={ChoixDuree} />
+        <Stack.Screen name="ChoixPartie" component={ChoixPartie} />
         <Stack.Screen name="ChoixStyle" component={ChoixStyle} />
         <Stack.Screen name="ChoixUnivers" component={ChoixUnivers} />
         <Stack.Screen name="BulletPoint" component={BulletPoint} />
         <Stack.Screen name="PartieDetail" component={PartieDetail} />
-        <Stack.Screen name="ChoixPartie" component={ChoixPartie} />
         <Stack.Screen name="Histoire" component={Histoire} />
         <Stack.Screen name="ActionsHistoire" component={ActionsHistoire} />
        

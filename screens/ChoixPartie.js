@@ -1,9 +1,10 @@
-import React from "react";
+import React,{ useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
 import Logo from "../components/Logo";
+import { saveOnboardingData } from "../reducers/game";
 
-export default function ChoixDuree({ navigation }) {
+export default function ChoixPartie({ navigation }) {
 
   const [niveau, setNiveau] = useState(null);
   const dispatch = useDispatch()
@@ -21,28 +22,28 @@ export default function ChoixDuree({ navigation }) {
   return (
     <View style={styles.container}>
       <Logo />
-      <Text>Combien de temps va durer la partie?</Text>
+      <Text>Quel niveaux </Text>
       <TouchableOpacity
         style={styles.button}
         onPress={() => handleNiveauSelection("super debutant")}
       >
-        <Text>Rapide</Text>
+        <Text>super debutant</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
         onPress={() => handleNiveauSelection("moyen")}
       >
-        <Text>Moyen</Text>
+        <Text>moyen</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
         onPress={() => handleNiveauSelection("Chaud")}
       >
-        <Text>Longue</Text>
+        <Text>chaud</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.suivantButton}
-        onPress={Suivant}
+        onPress={ () => Suivant(niveau)}
       >
         <Text style={styles.buttonText}>Suivant</Text>
       </TouchableOpacity>

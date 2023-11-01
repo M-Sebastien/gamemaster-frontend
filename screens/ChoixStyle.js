@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState }from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
+import { saveOnboardingData } from "../reducers/game";
 import Logo from "../components/Logo";
 
 export default function ChoixStyle({ navigation }) {
@@ -42,7 +43,7 @@ export default function ChoixStyle({ navigation }) {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.suivantButton}
-        onPress={Suivant}
+        onPress={ () => Suivant(style)}
       >
         <Text style={styles.buttonText}>Suivant</Text>
       </TouchableOpacity>

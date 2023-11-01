@@ -26,7 +26,7 @@ const MesParties = () => {
   const commencerPartie = () => {
     // Mettez en œuvre le code pour commencer la partie ici
     // Peut-être naviguer vers un écran de jeu ou effectuer d'autres actions nécessaires
-    console.log("Partie commencée:", partieActuelle.titre);
+    console.log("Partie commencée:");
     navigation.navigate("CreationJoueurs"); // Naviguer vers la page ChoixDurée
   };
 
@@ -42,7 +42,7 @@ const MesParties = () => {
       )}
       <TouchableOpacity
         style={styles.button}
-        onPress={commencerPartie}
+        onPress={() => commencerPartie()}
         disabled={!partieActuelle}
       >
         <Text style={styles.buttonText}>Commencer la partie</Text>

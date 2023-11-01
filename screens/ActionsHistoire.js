@@ -1,29 +1,28 @@
 import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Logo from "../components/Logo";
 import { useDispatch } from "react-redux";
-import { updateAction } from "../reducers/game";
-import ActionsGpt from "../Gpt-components/ActionsGpt";
 
-export default function Histoire({ navigation }) {
-  const dispatch = useDispatch()
+import { useState } from "react";
 
+export default function ActionsHistoire({ navigation }) {
+  const dispatch = useDispatch();
+  const [actions, setActions] = useState(null);
 
-  const Suivant = () => {
-
-    dispatch(updateAction)
+  const Suivant = (actions) => {
+    setActions(actions);
+    dispatch(updateAction(actions));
     navigation.navigate("Histoire");
-  }
+  };
 
   return (
     <View style={styles.container}>
       <Logo />
       <Text>Suite de l'histoire</Text>
       <Text>
-        <ActionsGpt />
       </Text>
       <TouchableOpacity
         style={styles.suivantButton}
-        onPress={Suivant}
+        onPress={() => Suivant(actions)}
       >
         <Text style={styles.buttonText}>Suivant</Text>
       </TouchableOpacity>

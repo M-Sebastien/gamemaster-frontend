@@ -23,14 +23,15 @@ const gameSlice = createSlice({
   initialState,
   reducers: {
     // Action pour ajouter un joueur
-    addPlayer: (state, action) => {
-      if (state.context.players.length < 5) {
-        state.context.players.push({ name: `Joueur ${state.context.players.length + 1}`, description: "" });
-      }
+    addCharacters: (state, action) => {
+      state.context.players.push(action.payload);
     },
-    removePlayer: (state, action) => {
-      state.context.players.splice(action.payload, 1);
+
+    updatePlayers: (state, action) => {
+      state.context.players = action.payload;
     },
+
+   
 
     // Action pour mettre à jour l'histoire
     updateStory: (state, action) => {
@@ -53,7 +54,7 @@ const gameSlice = createSlice({
   },
 });
 
-export const { addPlayer, removePlayer, updateStory, addAction, saveOnboardingData, updatePlayers } = gameSlice.actions;
+export const { addPlayer, removePlayer, updateStory, addAction, saveOnboardingData, updatePlayers, addCharacters } = gameSlice.actions;
 export default gameSlice.reducer;
 
 
