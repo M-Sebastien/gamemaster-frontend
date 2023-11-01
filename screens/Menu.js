@@ -8,12 +8,12 @@ export default function Menu({ navigation }) {
       <Logo />
       <View style={styles.introContainer}>
         <Text style={styles.intro}>
-          Désormais tu es le game master, tes choix vont influer sur les rôles
-          de chacun ainsi que la suite de ton histoire.
+          Désormais tu es le game master, vos choix vont influer sur les rôles
+          de chacun ainsi que la suite de votre histoire.
         </Text>
       </View>
       <View style={styles.titreContainer}>
-        <Text style={styles.titre}>Entre dans l'histoire</Text>
+        <Text style={styles.titre}>Entrez dans l'histoire</Text>
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
@@ -47,6 +47,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: "10%",
     paddingVertical: "15%",
     marginTop: "10%",
+    textShadowColor: "#efefef",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
   },
   titre: {
     fontFamily: "LeagueSpartan_900Black",

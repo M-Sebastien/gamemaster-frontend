@@ -65,6 +65,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: "15%",
     borderRadius: 8,
     marginBottom: "4%",
+    textShadowColor: "#efefef",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
   },
   titrePartie: {
     fontFamily: "LeagueSpartan_700Bold",

@@ -57,6 +57,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: "5%",
     marginTop: "5%",
+    textShadowColor: "#efefef",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
   },
   input: {
     backgroundColor: "#efefef",

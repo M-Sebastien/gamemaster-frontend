@@ -22,19 +22,19 @@ export default function ChoixStyle({ navigation }) {
       <View style={styles.buttonContainer}>
         <Text style={styles.intro}>Quel style de jeu préférez-vous?</Text>
         <TouchableOpacity
-          style={styles.button}
+          style={style === "classique" ? styles.buttonFocus : styles.button}
           onPress={() => handleStyleSelection("classique")}
         >
           <Text>Classique</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.button}
+          style={style === "intrigue" ? styles.buttonFocus : styles.button}
           onPress={() => handleStyleSelection("intrigue")}
         >
           <Text>Intrigue</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.button}
+          style={style === "exploration" ? styles.buttonFocus : styles.button}
           onPress={() => handleStyleSelection("exploration")}
         >
           <Text>Exploration</Text>
@@ -64,6 +64,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: "10%",
     paddingVertical: "5%",
     marginTop: "4%",
+    textShadowColor: "#efefef",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
   },
   buttonContainer: {
     justifyContent: "center",
@@ -72,6 +75,15 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "#efefef",
+    paddingVertical: "5%",
+    paddingHorizontal: "15%",
+    borderRadius: 8,
+    marginTop: "7%",
+    width: 300,
+    alignItems: "center",
+  },
+  buttonFocus: {
+    backgroundColor: "#859393",
     paddingVertical: "5%",
     paddingHorizontal: "15%",
     borderRadius: 8,
