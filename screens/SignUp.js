@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     marginTop: "5%",
     textShadowColor: "#efefef",
     textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 5,
+    textShadowRadius: 10,
   },
   input: {
     backgroundColor: "#efefef",

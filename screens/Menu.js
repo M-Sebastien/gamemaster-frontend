@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     marginTop: "10%",
     textShadowColor: "#efefef",
     textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 5,
+    textShadowRadius: 10,
   },
   titre: {
     fontFamily: "LeagueSpartan_900Black",
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     paddingVertical: "15%",
     textShadowColor: "#000000",
     textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 5,
+    textShadowRadius: 10,
   },
   buttonContainer: {
     justifyContent: "center",

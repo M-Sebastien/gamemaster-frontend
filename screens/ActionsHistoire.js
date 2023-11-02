@@ -35,22 +35,53 @@ export default function ActionsHistoire({ navigation }) {
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          style={styles.button}
+          style={styles.card}
           onPress={() => handleChoixSelection("Choix1")}
         >
-          <Text>Ici c'est le Choix 1</Text>
+          <Text>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem
+            ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
+            tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor
+            sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit
+            amet, consectetur adipiscing elit.
+          </Text>
         </TouchableOpacity>
+
         <TouchableOpacity
-          style={styles.button}
+          style={styles.card}
           onPress={() => handleChoixSelection("Choix2")}
         >
-          <Text>Ici c'est le Choix 2</Text>
+          <Text>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem
+            ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
+            tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor
+            sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit
+            amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt
+            ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet,
+            consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
+            labore et dolore magna aliqua.
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.button}
+          style={styles.card}
           onPress={() => handleChoixSelection("Choix3")}
         >
-          <Text>Ici c'est le Choix 3</Text>
+          <Text>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem
+            ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
+            tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor
+            sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit
+            amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt
+            ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet,
+            consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
+            labore et dolore magna aliqua.
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
@@ -79,7 +110,7 @@ const styles = StyleSheet.create({
     marginTop: "4%",
     textShadowColor: "#efefef",
     textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 5,
+    textShadowRadius: 10,
   },
   cardContainer: {
     width: "100%",
@@ -91,8 +122,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#efefef",
     padding: "5%",
     borderRadius: 8,
-    marginBottom: "5%",
-    width: "90%",
+    marginBottom: "8%",
+    maxWidth: "80%",
+    maxHeight: "40%",
   },
   buttonContainer: {
     justifyContent: "center",

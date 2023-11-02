@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     marginTop: "0%",
     textShadowColor: "#efefef",
     textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 5,
+    textShadowRadius: 10,
   },
   partieContainer: {
     textAlign: "center",
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     marginBottom: "9%",
     textShadowColor: "#efefef",
     textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 5,
+    textShadowRadius: 10,
   },
   titrePartie: {
     fontFamily: "LeagueSpartan_700Bold",

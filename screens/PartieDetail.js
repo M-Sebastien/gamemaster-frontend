@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     marginTop: "4%",
     textShadowColor: "#efefef",
     textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 5,
+    textShadowRadius: 10,
   },
   cardContainer: {
     width: "100%",
