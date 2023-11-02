@@ -1,24 +1,58 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch } from "react-redux"; // Importez useNavigation depuis React Navigation
+import { useDispatch, useSelector } from "react-redux";
 import Logo from "../components/Logo";
-import { saveOnboardingData } from "../reducers/game";
+import { saveOnboardingData, updateStory } from "../reducers/game";
+import { useFetchGpt } from "../hooks/useFetchGpt";
+
+
 
 export default function ChoixUnivers() {
   const dispatch = useDispatch();
-  const navigation = useNavigation(); // Utilisez useNavigation pour accéder à l'objet de navigation
+  const navigation = useNavigation();
+  const context = useSelector((state) => state.game.context);
+  const players = useSelector((state) => state.game.context.players);
+  const onboardingData = useSelector((state) => state.game.context.onboardingData);
 
   const [univers, setUnivers] = useState(null);
 
   const handleUniversSelection = (univers) => {
     setUnivers(univers);
+    console.log("Univers sélectionné :", univers);
   };
 
-  const Suivant = (univers) => {
-    dispatch(saveOnboardingData(univers));
-    navigation.navigate("BulletPoint");
+  const Suivant = async () => {
+    try {
+      if (!univers) {
+        // Afficher un message d'erreur si l'univers n'est pas sélectionné
+        console.error("Veuillez sélectionner un univers !");
+        return;
+      }
+
+      console.log("Navigation vers BulletPoint...");
+      navigation.navigate("BulletPoint");
+
+      const response = await useFetchGpt(
+        `Créer une histoire dans l'univers ${univers}. Il y a ${players.length} joueurs. 
+        Contexte : ${onboardingData}. Soyez inventif !`,
+        200,
+        `Tu es mon assistant game-master qui connaît sur le bout des doigts l'univers de donjon et dragon. 
+        Voici le contexte de l'histoire en cours : ${context}`
+      );
+
+      dispatch(saveOnboardingData(univers));
+      console.log("Données sauvegardées :", univers);
+
+      dispatch(updateStory(response));
+      console.log("Histoire générée :", response);
+    } catch (error) {
+      console.error("Une erreur s'est produite :", error);
+      // Gérer l'erreur si nécessaire
+    }
   };
+
+
 
   return (
     <View style={styles.container}>
@@ -45,10 +79,7 @@ export default function ChoixUnivers() {
         >
           <Text>Ville</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.suivantButton}
-          onPress={() => Suivant(univers)}
-        >
+        <TouchableOpacity style={styles.suivantButton} onPress={() => Suivant()}>
           <Text style={styles.buttonText}>Suivant</Text>
         </TouchableOpacity>
       </View>
@@ -91,9 +122,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: "15%",
     borderRadius: 8,
     marginTop: "7%",
-    elevation: "5%",
+    elevation: 5,
     shadowColor: "#000",
-    shadowOpacity: "3%",
+    shadowOpacity: 0.3,
     shadowOffset: { width: 0, height: 2 },
   },
   buttonText: {

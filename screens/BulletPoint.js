@@ -1,22 +1,16 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Logo from "../components/Logo";
 import { saveOnboardingData } from "../reducers/game";
 
-const joueurs = [
-  { id: 1, name: "Joueur 1", description: "Description du joueur 1" },
-  { id: 2, name: "Joueur 2", description: "Description du joueur 2" },
-  // Ajoute autant de joueurs que nécessaire
-];
-
-export default function BulletPoint() {
+const BulletPoint = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const players = useSelector((state) => state.game.context.players);
 
-  const entrerDansLhistoire = (joueur) => {
-    dispatch(saveOnboardingData(joueur));
+  const entrerDansLhistoire = () => {
     navigation.navigate("PartieDetail");
   };
 
@@ -25,22 +19,19 @@ export default function BulletPoint() {
       <Logo />
       <Text style={styles.intro}>Voici tes joueurs</Text>
       <View style={styles.cardContainer}>
-        <View style={styles.card}>
-          <Text>Mon nom</Text>
-          <Text>Ma description</Text>
-        </View>
-      </View>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate("PartieDetail")}
-        >
+        {players.map((player) => (
+          <View style={styles.card} key={player.id}>
+            <Text>{player.name}</Text>
+            <Text>{player.description}</Text>
+          </View>
+        ))}
+        <TouchableOpacity style={styles.button} onPress={entrerDansLhistoire}>
           <Text style={styles.buttonText}>Entrer dans l'histoire</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -56,11 +47,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: "10%",
     paddingVertical: "5%",
     marginTop: "4%",
-  },
-  buttonContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: "10%",
   },
   cardContainer: {
     width: "100%",
@@ -81,14 +67,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: "15%",
     borderRadius: 8,
     marginTop: "7%",
-    elevation: "5%",
+    elevation: 5,
     shadowColor: "#000",
-    shadowOpacity: "3%",
+    shadowOpacity: 0.3,
     shadowOffset: { width: 0, height: 2 },
   },
   buttonText: {
     fontFamily: "LeagueSpartan_700Bold",
     fontSize: 18,
     fontWeight: "bold",
+    textAlign: "center",
   },
 });
+
+export default BulletPoint;
+

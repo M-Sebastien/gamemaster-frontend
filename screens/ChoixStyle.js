@@ -1,18 +1,26 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
-import Logo from "../components/Logo";
 import { saveOnboardingData } from "../reducers/game";
+import Logo from "../components/Logo";
 
 export default function ChoixStyle({ navigation }) {
   const [style, setStyle] = useState(null);
   const dispatch = useDispatch();
-  const handleStyleSelection = (style) => {
-    setStyle(style);
+
+  const handleStyleSelection = (selectedStyle) => {
+    setStyle(selectedStyle);
+    console.log("Style sélectionné :", selectedStyle);
   };
 
-  const Suivant = (style) => {
+  const Suivant = () => {
+    if (!style) {
+      console.error("Veuillez sélectionner un style de jeu !");
+      return; // Arrêter la fonction si aucun style n'est sélectionné
+    }
+
     dispatch(saveOnboardingData(style));
+    console.log("Données sauvegardées :", style);
     navigation.navigate("ChoixUnivers");
   };
 
@@ -23,26 +31,23 @@ export default function ChoixStyle({ navigation }) {
         <Text style={styles.intro}>Quel style de jeu préférez-vous?</Text>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => handleStyleSelection("classique")}
+          onPress={() => handleStyleSelection("c")}
         >
           <Text>Classique</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => handleStyleSelection("intrigue")}
+          onPress={() => handleStyleSelection("o")}
         >
           <Text>Intrigue</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => handleStyleSelection("exploration")}
+          onPress={() => handleStyleSelection("e")}
         >
           <Text>Exploration</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.suivantButton}
-          onPress={() => Suivant(style)}
-        >
+        <TouchableOpacity style={styles.suivantButton} onPress={Suivant}>
           <Text style={styles.buttonText}>Suivant</Text>
         </TouchableOpacity>
       </View>
@@ -85,9 +90,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: "15%",
     borderRadius: 8,
     marginTop: "7%",
-    elevation: "5%",
+    elevation: 5,
     shadowColor: "#000",
-    shadowOpacity: "3%",
+    shadowOpacity: 0.3,
     shadowOffset: { width: 0, height: 2 },
   },
   buttonText: {
@@ -96,3 +101,4 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
+
