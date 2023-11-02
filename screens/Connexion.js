@@ -2,13 +2,12 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { signin } from "../reducers/user";
 import {
-  KeyboardAvoidingView,
-  Platform,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
+  ScrollView,
 } from "react-native";
 import Logo from "../components/Logo";
 
@@ -44,10 +43,7 @@ export default function Connexion({ navigation }) {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
+    <ScrollView style={styles.container}>
       <Logo />
       <View style={styles.centerContainer}>
         <Text style={styles.label}>Nom d'utilisateur</Text>
@@ -83,7 +79,7 @@ export default function Connexion({ navigation }) {
           <Text style={styles.buttonText}>Se connecter</Text>
         </TouchableOpacity>
       </View>
-    </KeyboardAvoidingView>
+    </ScrollView>
   );
 }
 

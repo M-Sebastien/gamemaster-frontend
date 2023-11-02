@@ -3,13 +3,12 @@ import { useDispatch } from "react-redux";
 import { signup } from "../reducers/user";
 
 import {
-  KeyboardAvoidingView,
-  Platform,
   View,
   Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  ScrollView,
 } from "react-native";
 import Logo from "../components/Logo";
 
@@ -45,11 +44,7 @@ const SignUp = ({ navigation }) => {
   };
 
   return (
-    // Modifier le style de KeyboardAvoidingView si besoin
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
+    <ScrollView style={styles.container}>
       <Logo />
       <View style={styles.centerContainer}>
         <Text style={styles.label}>Nom d'utilisateur:</Text>
@@ -85,7 +80,7 @@ const SignUp = ({ navigation }) => {
           <Text style={styles.buttonText}>S'inscrire</Text>
         </TouchableOpacity>
       </View>
-    </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 

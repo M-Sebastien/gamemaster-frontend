@@ -3,9 +3,6 @@ import { ActivityIndicator, StyleSheet, View } from "react-native";
 
 const Spinner = () => (
   <View style={[styles.container, styles.horizontal]}>
-    <ActivityIndicator />
-    <ActivityIndicator size="large" />
-    <ActivityIndicator size="small" color="#efefef" />
     <ActivityIndicator size="large" color="#efefef" />
   </View>
 );

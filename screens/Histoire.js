@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -10,10 +10,13 @@ import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import Logo from "../components/Logo";
 import { saveOnboardingData } from "../reducers/game";
+import Spinner from "../components/Spinner";
 
 export default function Histoire() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+
+  const [loading, setLoading] = useState(true);
 
   const game = useSelector((state) => state.game);
   const token = useSelector((state) => state.user.value.token);
@@ -24,6 +27,7 @@ export default function Histoire() {
   };
 
   function saveGame() {
+    setLoading(true);
     fetch(`https://gamemaster-backend.vercel.app/stories/saveStory/${token}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -43,13 +47,15 @@ export default function Histoire() {
       })
       .then((data) => {
         console.log(data);
+        setLoading(false);
         navigation.navigate("MesParties");
       });
   }
 
-  return (
+  return loading ? (
+    <Spinner />
+  ) : (
     <ScrollView style={styles.container}>
-      {/* {isLoading ?(<Spinner/> ) :data?(  */}
       <Logo />
       <Text style={styles.intro}>Découvrez la suite de l'histoire</Text>
       <View style={styles.cardContainer}>
@@ -97,8 +103,6 @@ export default function Histoire() {
           <Text style={styles.buttonText}>Sauvegarder la partie</Text>
         </TouchableOpacity>
       </View>
-
-      {/* )} */}
     </ScrollView>
   );
 }

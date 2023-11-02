@@ -2,6 +2,7 @@ import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Logo from "../components/Logo";
 import { useDispatch, useSelector } from "react-redux";
 import { updateAction } from "../reducers/game";
+import { useState } from "react";
 import ActionsGpt from "../Gpt-components/ActionsGpt";
 
 export default function ActionsHistoire({ navigation }) {
