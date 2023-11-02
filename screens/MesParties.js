@@ -1,54 +1,63 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { useNavigation } from "@react-navigation/native"; // Importez useNavigation depuis React Navigation
+import { useNavigation } from "@react-navigation/native";
 import Logo from "../components/Logo";
 
 const MesParties = () => {
-  const [parties, setParties] = useState([]);
-  const [partieActuelle, setPartieActuelle] = useState(null);
-  const navigation = useNavigation(); // Utilisez useNavigation pour accéder à l'objet de navigation
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.user.value.token);
+  const navigation = useNavigation();
 
-  // Simulation des données de parties
-  const partiesEnregistrees = [
-    { id: 1, titre: "Partie 1" },
-    { id: 2, titre: "Partie 2" },
-    // ... d'autres parties enregistrées
-  ];
+  const [storiesData, setStoriesData] = useState([]);
 
   useEffect(() => {
-    // Au chargement de la page, sélectionnez la première partie
-    if (partiesEnregistrees.length > 0) {
-      setPartieActuelle(partiesEnregistrees[0]);
-      setParties(partiesEnregistrees);
-    }
-  }, []); // Le tableau vide signifie que cela s'exécutera uniquement une fois, équivalent à componentDidMount
+    fetch(
+      `https://gamemaster-backend.vercel.app/stories/getStoriesByToken/${token}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        setStoriesData(data.stories);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
-  const commencerPartie = () => {
-    // Mettez en œuvre le code pour commencer la partie ici
-    // Peut-être naviguer vers un écran de jeu ou effectuer d'autres actions nécessaires
-    console.log("Partie commencée:", partieActuelle.titre);
-    navigation.navigate("CreationJoueurs"); // Naviguer vers la page ChoixDurée
+  const handleValidation = () => {
+    navigation.navigate("CreationJoueurs");
+  };
+
+  const handleStorySelection = (selectedStory) => {
+    navigation.navigate("Histoire", { story: selectedStory });
+  };
+
+  const renderStoryButtons = () => {
+    return storiesData.map((story, index) => (
+      <TouchableOpacity
+        key={index}
+        style={styles.partieContainer}
+        onPress={() => handleStorySelection(story)}
+      >
+        <Text style={styles.buttonText}>{story.context.title}</Text>
+      </TouchableOpacity>
+    ));
   };
 
   return (
     <View style={styles.container}>
       <Logo />
-      <Text style={styles.intro}>Retrouvez vos parties en cours</Text>
-
       <View style={styles.centerContainer}>
-        {partieActuelle ? (
-          <View style={styles.partieContainer}>
-            <Text style={styles.titrePartie}>{partieActuelle.titre}</Text>
-          </View>
+        <Text style={styles.intro}>Retrouvez ici vos parties en cours</Text>
+
+        {storiesData.length > 0 ? (
+          <View>{renderStoryButtons()}</View>
         ) : (
-          <Text>Aucune partie enregistrée.</Text>
+          <Text style={styles.intro}>Aucune partie enregistrée</Text>
         )}
-        <TouchableOpacity
-          style={styles.button}
-          onPress={commencerPartie}
-          disabled={!partieActuelle}
-        >
-          <Text style={styles.buttonText}>Commencer la partie</Text>
+
+        <TouchableOpacity style={styles.button} onPress={handleValidation}>
+          <Text style={styles.buttonText}>Nouvelle partie</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -67,8 +76,8 @@ const styles = StyleSheet.create({
     lineHeight: 25,
     justifyContent: "center",
     paddingHorizontal: "10%",
-    paddingVertical: "5%",
-    marginTop: "4%",
+    paddingVertical: "15%",
+    marginTop: "0%",
     textShadowColor: "#efefef",
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 5,
@@ -79,7 +88,7 @@ const styles = StyleSheet.create({
     paddingVertical: "5%",
     paddingHorizontal: "15%",
     borderRadius: 8,
-    marginBottom: "4%",
+    marginBottom: "9%",
     textShadowColor: "#efefef",
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 5,
@@ -92,7 +101,6 @@ const styles = StyleSheet.create({
   centerContainer: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: "20%", // 20% de la hauteur de l'écran
   },
   button: {
     backgroundColor: "#efefef",
