@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import Logo from "../components/Logo";
-import { saveOnboardingData, updateStory } from "../reducers/game";
+import { saveOnboardingData, updateStory, updateStorySuite } from "../reducers/game";
 import { useFetchGpt } from "../hooks/useFetchGpt";
 
 
@@ -44,8 +44,9 @@ export default function ChoixUnivers() {
       dispatch(saveOnboardingData(univers));
       console.log("Données sauvegardées :", univers);
 
-      dispatch(updateStory(response));
-      console.log("Histoire générée :", response);
+      dispatch(updateStory(response.gptResponse));
+      // dispatch(updateStorySuite(response.gptResponse))
+      console.log("Histoire générée :", response.gptResponse);
     } catch (error) {
       console.error("Une erreur s'est produite :", error);
       // Gérer l'erreur si nécessaire

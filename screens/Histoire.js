@@ -1,69 +1,82 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Logo from "../components/Logo";
-import { useDispatch, useSelector } from "react-redux";
-import { updateAction } from "../reducers/game";
-import { useFetchGpt } from "../hooks/useFetchGpt"; // Assurez-vous d'importer les actions nécessaires
+import React, { useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import Logo from '../components/Logo';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateAction } from '../reducers/game';
+import { useFetchGpt } from '../hooks/useFetchGpt';
 
 export default function Histoire({ navigation }) {
   const dispatch = useDispatch();
-  const [actions, setActions] = useState(null);
+  const context = useSelector((state) => state.game.context);
+  const player = useSelector((state) => state.game.story[state.game.story.length -1].player);
+  const previousStory = useSelector((state) => state.game.story[state.game.story.length -1].story);
+   useEffect(() => {
+    console.log("store--------------------", previousStory)
+   },[])
+  const story = useSelector((state) => {
+    const stories = state.game.story && state.game.story.story; // Vérifiez que state.game.story est défini
+    const currentTurn = state.game.story && state.game.story.turn;
   
-  const lastStory = useSelector((state) => {
-    const stories = state.game.story.story;
-    if (stories.length > 0) {
-      return stories[stories.length - 1]; // Dernière histoire dans le tableau
+    if (stories && stories.length > 0 && currentTurn) {
+      const lastTurnStory = stories.find(story => story.turn === currentTurn);
+  
+      if (lastTurnStory) {
+        return lastTurnStory.text;
+      }
     }
-    return null; // Retourne null si le tableau est vide
+  
+    return null;
   });
-
-  const context = useSelector((state) => state.game.context); // Récupération du context
-  const player = useSelector((state)  => state.game.context.player)
 
   const Suivant = async () => {
     try {
-   
-      navigation.navigate("ActionsHistoire");// Vous devez définir la fonction generatePlayersPrompt
+      navigation.navigate("ActionsHistoire");
 
+      // Supposons que useFetchGpt effectue un appel asynchrone à une API pour obtenir des données
       const response = await useFetchGpt(
-
-        `tu crées 3 actions pour chaque personnage. Je veux que tu generes les actions uniquement pour ce personnage : ${player.name}, je veux que tu me le sorte sous forme de liste, sans commentaire.`,
-        200,
-        `tu es mon assistant game-master qui connais sur le bout des doigts l'univers de donjon et dragon, voici le context de l'histoire en cours : ${context}`
+        `Tu crées 3 actions pour chaque personnage de cette ${story}. Je veux que tu génères les actions uniquement pour ce personnage : ${player}, en une phrase, sans commentaire et sans details`,
+        500,
+        `Tu es mon assistant game-master qui connaît sur le bout des doigts l'univers de donjon et dragon, voici le contexte de l'histoire en cours : ${context}`
       );
-      setActions(actions);
-      dispatch(updateAction(actions))
 
-      
-      console.log(response);
+      const newStory = response.gptResponse;
+      const currentTurn = 1; // Remplacez 1 par le numéro de tour actuel récupéré depuis votre state Redux
+
+      dispatch(updateAction({ text: newStory, turn: currentTurn }));
+      navigation.navigate("ActionsHistoire");
     } catch (error) {
       console.error("Une erreur s'est produite :", error);
-      // Gérer l'erreur si nécessaire
     }
   };
 
+  useEffect(() => {
+    // Vous pouvez ajouter ici une logique pour charger l'histoire pour le tour actuel au chargement du composant, si nécessaire
+  }, []);
+
   return (
-    <View style={styles.container}>
-      <Logo />
-      <Text>Suite de l'histoire</Text>
-      <Text>
-        {lastStory ? (
-          <p>{lastStory}</p>
-        ) : (
-          <p>Aucune histoire n'est disponible pour le moment.</p>
-        )}
-      </Text>
-      <TouchableOpacity style={styles.suivantButton} onPress={() => Suivant()}>
-        <Text style={styles.buttonText}>Suivant</Text>
-      </TouchableOpacity>
-    </View>
+    <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+      <View style={styles.container}>
+        <Logo />
+        <Text>Suite de l'histoire</Text>
+        <Text>{previousStory}</Text>
+        <TouchableOpacity style={styles.suivantButton} onPress={() => Suivant()}>
+          <Text style={styles.buttonText}>Suivant</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollViewContainer: {
+    flexGrow: 1,
+    backgroundColor: 'white',
+    paddingVertical: 20,
+    paddingHorizontal: 15,
+  },
   container: {
-    flex: 1,
     backgroundColor: "#5D726F",
+    paddingBottom: 20,
   },
   suivantButton: {
     backgroundColor: "#2E7D32",
@@ -76,4 +89,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 16,
   },
+  storyText: {
+    color: "black", // Couleur du texte provenant du store Redux
+  },
+  newGptResponse: {
+    color: "red", // Couleur du texte provenant de la réponse la plus récente de GPT
+  },
 });
+
+

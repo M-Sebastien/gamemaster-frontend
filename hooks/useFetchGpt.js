@@ -38,10 +38,11 @@ try {
         //  if (!gptResponse.ok) {
         //    throw new Error('La requête a échoué');
         //  } 
-   console.log(gptResponse)
+   
         const response = await gptResponse.json();
-console.log(response)
+console.log(response.choices[0].message)
         return { gptResponse: response.choices[0].message.content, isLoading: false };
+        
          
 } catch (error) {
       return { error: error, isLoading: false };

@@ -3,30 +3,32 @@ import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from "react-nati
 import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
 import Logo from "../components/Logo";
-import { updateAction } from "../reducers/game";
+import { updateChoices } from "../reducers/game";
 import { useFetchGpt } from "../hooks/useFetchGpt"; // Import de l'action updateAction
 
 const PartieDetail = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  const story = useSelector((state) => state.game.context.story);
-
+  const story = useSelector((state) => state.game.context.initialStory);
+  const context = useSelector((state) => state.game.context);
+  const store = useSelector((state) => state.game);
+  const player = useSelector((state) => state.game.context.players[0]);
+console.log("store ------------------", store)
   const goToActionsHistoire = async () => {
     try {
       const response = await useFetchGpt(
-        `tu crées 3 actions pour chaque personnage. Je veux que tu génères les actions uniquement pour ce personnage : ${player.name}, je veux que tu me les sortes sous forme de liste, sans commentaire.`,
+        `Tu crées 3 actions pour chaque personnage de cette ${story}. Je veux que tu génères les actions uniquement pour ce personnage : ${player.name}, je veux que tu me les sortes sous forme de liste, sans commentaire.`,
         200,
-        `tu es mon assistant game-master qui connaît sur le bout des doigts l'univers de donjon et dragon, voici le context de l'histoire en cours : ${context}`
+        `Tu es mon assistant game-master qui connaît sur le bout des doigts l'univers de donjon et dragon, voici le contexte de l'histoire en cours : ${context}`
       );
       
       // Mettre à jour les actions enregistrées
-      setActions(response.actions); // Assurez-vous que setActions est une fonction définie pour mettre à jour le state
-      dispatch(updateAction(response.actions)); // Mettre à jour l'action dans Redux
+      const actions = response.gptResponse.split(/[0-9]./).slice(1, -1); // Obtention des actions
+      dispatch(updateChoices(actions)); // Mettre à jour l'action dans Redux
+      navigation.navigate("ActionsHistoire");
     } catch (error) {
       console.error("Une erreur s'est produite :", error);
-      
-      navigation.navigate("ActionsHistoire");
     }
   };
 
@@ -104,5 +106,6 @@ const styles = StyleSheet.create({
 });
 
 export default PartieDetail;
+
 
 

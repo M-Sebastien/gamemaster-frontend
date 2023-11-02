@@ -7,16 +7,8 @@ const initialState = {
     players: [],
     onboardingData: [], // Ajoutez un tableau pour sauvegarder les choix des utilisateurs
   },
-  story: [
-    {
-      turn: 0,
-      player: { name: "", character: "" },
-      story: "",
-      choices: [],
-      action: "", // Changez cette clé en un tableau pour stocker plusieurs actions
-    },
-  ],
-};
+  story: []}
+  ;
 
 const gameSlice = createSlice({
   name: "game",
@@ -31,21 +23,46 @@ const gameSlice = createSlice({
     },
 
     updateStory: (state, action) => {
-      state.story[0].story = action.payload;
+      state.context.initialStory = action.payload;
     },
 
-    updateChoices: (state, action) => {
-      state.story[0].choices.push(action.payload);
+    updateChoices:(state, action) => {
+      if (state.story.length === 0 ) {
+      state.story.push({
+        turn: 0,
+      player: { name: state.context.players[0].name, character: ""},
+      story: action.payload,
+      choices: [],
+      action: "",
+      })
+      }
+      else {
+        state.story.push({
+          turn: state.story.length -1,
+        player: { name: state.context.players[state.context.players.indexOf(state.story[state.story.length -1].player) + 1].name
+          , character: ""},
+        story: "",
+        choices: action.payload,
+        action: "",
+        })
+      }
+    },
+
+    updateStorySuite: (state, action) => {
+      state.story[state.story.length -1].story = action.payload; // Remplacez les choix existants par les nouveaux
     },
 
     updateAction: (state, action) => {
-      state.story[0].action = action.payload;
+      state.story[state.story.length -1].action = action.payload; // Remplacez les actions existantes par les nouvelles
     },
 
     saveOnboardingData: (state, action) => {
       state.context.onboardingData.push(action.payload);
     },
-   
+
+    addStory: (state, action) => {
+      state.story.push(action.payload);
+    },
   },
 });
 
@@ -55,6 +72,9 @@ export const {
   updateStory,
   updateAction,
   saveOnboardingData,
-  addStory
+  addStory,
+  updateChoices,
+  updateStorySuite
 } = gameSlice.actions;
+
 export default gameSlice.reducer;

@@ -1,42 +1,67 @@
-import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Text, TouchableOpacity, View, StyleSheet, ScrollView } from "react-native";
 import Logo from "../components/Logo";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
-import { updateStory, updateChoices } from "../reducers/game";
+import { updateStorySuite, updateAction } from "../reducers/game";
 import { useFetchGpt } from "../hooks/useFetchGpt";
 
 export default function ActionsHistoire({ navigation }) {
   const dispatch = useDispatch();
-  const [story, setStory] = useState(null);
-
-  const lastStory = useSelector((state) => {
-    const stories = state.game.story;
-    if (stories.length > 0) {
-      return stories[stories.length - 1]; // Dernière histoire dans le tableau
-    }
-    return null; // Retourne null si le tableau est vide
-  });
-
-  const action = useSelector((state) => state.game.story.choices);
+  const [choices, setChoices] = useState(new Array(3).fill("En attente..."));
   const context = useSelector((state) => state.game.context);
-  const choices = useSelector((state) => state.game.story.choices);
+  const action = useSelector((state) => state.game.story?.action);
+  const player = useSelector((state) => state.game.context.player);
+  const story = useSelector((state) => state.game.story);
+
+  const generateChoices = async () => {
+    const updatedChoices = [...choices];
+
+    for (let i = 0; i < 3; i++) {
+      try {
+        const response = await useFetchGpt(
+          `Tu génères un choix d'action pour le joueur ${player} en fonction de ${context} et de la précédente histoire.`,
+          20,
+          `Tu es mon assistant game-master qui connaît sur le bout des doigts l'univers de donjon et dragon. Voici le contexte de l'histoire en cours : ${context} et la précédente histoire : ${story}`
+        );
+        updatedChoices[i] = response.gptResponse;
+        console.log("Réponse de GPT pour le choix", i, ":", response.gptResponse);
+      } catch (error) {
+        console.error("Une erreur s'est produite :", error);
+        // Gérer l'erreur si nécessaire
+        updatedChoices[i] = "Erreur lors de la génération du choix";
+      }
+    }
+
+    setChoices(updatedChoices);
+  };
+
+  useEffect(() => {
+    generateChoices();
+  }, [story]); // Exécuté lorsque la "story" change dans le store
+
+  const saveChoice = (choixIndex) => {
+    try {
+      const selectedChoice = choices[choixIndex];
+      dispatch(updateAction(selectedChoice));
+      console.log("Choix sauvegardé :", selectedChoice);
+    } catch (error) {
+      console.error("Erreur lors de la sauvegarde du choix :", error);
+      // Gérer l'erreur si nécessaire
+    }
+  };
 
   const Suivant = async () => {
     try {
-      setStory(story);
-      dispatch(updateStory(story));
-      dispatch(updateChoices(choices));
-
       navigation.navigate("Histoire");
 
       const response = await useFetchGpt(
-        `Tu génères la suite de l'histoire en fonction de ${lastStory} et de l'action choisie par le joueur, ${choices}.`,
+        `Tu génères la suite de l'histoire en fonction de ${context} et du choix : ${action}.`,
         200,
         `Tu es mon assistant game-master qui connaît sur le bout des doigts l'univers de donjon et dragon. Voici le contexte de l'histoire en cours : ${context}`
       );
 
-      dispatch(updateStory(response));
-      console.log(response);
+      dispatch(updateStorySuite(response.gptResponse));
+      console.log("Réponse de GPT pour la suite de l'histoire :", response.gptResponse);
     } catch (error) {
       console.error("Une erreur s'est produite :", error);
       // Gérer l'erreur si nécessaire
@@ -47,8 +72,15 @@ export default function ActionsHistoire({ navigation }) {
     <View style={styles.container}>
       <Logo />
       <Text>Suite de l'histoire</Text>
-      <Text>Actions: {action}</Text>
-      <TouchableOpacity style={styles.suivantButton} onPress={Suivant}>
+      <Text>Actions:</Text>
+      {choices.map((choice, index) => (
+        <ScrollView key={index} style={[styles.button, styles.largeButton]} contentContainerStyle={styles.scrollViewContent}>
+          <TouchableOpacity onPress={() => saveChoice(index)}>
+            <Text style={styles.buttonText}>{`Choix ${index + 1}: ${choice}`}</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      ))}
+      <TouchableOpacity style={[styles.suivantButton, styles.largeButton]} onPress={Suivant}>
         <Text style={styles.buttonText}>Suivant</Text>
       </TouchableOpacity>
     </View>
@@ -68,10 +100,29 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 20,
   },
+  largeButton: {
+    width: 200,
+    height: 60,
+    marginVertical: 10,
+  },
+  button: {
+    backgroundColor: "#DDDDDD",
+    padding: 10,
+    borderRadius: 5,
+  },
   buttonText: {
-    color: "white",
+    color: "black",
     textAlign: "center",
     fontSize: 16,
   },
+  scrollViewContent: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
+
+
+
+
+
 

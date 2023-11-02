@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import Logo from "../components/Logo";
-import { saveOnboardingData } from "../reducers/game";
 
 const BulletPoint = () => {
   const dispatch = useDispatch();
@@ -19,12 +18,12 @@ const BulletPoint = () => {
       <Logo />
       <Text style={styles.intro}>Voici tes joueurs</Text>
       <View style={styles.cardContainer}>
-        {players.map((player) => (
+        {/* {players.map((player) => (
           <View style={styles.card} key={player.id}>
             <Text>{player.name}</Text>
             <Text>{player.description}</Text>
           </View>
-        ))}
+        ))} */}
         <TouchableOpacity style={styles.button} onPress={entrerDansLhistoire}>
           <Text style={styles.buttonText}>Entrer dans l'histoire</Text>
         </TouchableOpacity>
