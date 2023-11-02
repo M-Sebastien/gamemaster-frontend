@@ -33,6 +33,8 @@ const MesParties = () => {
   return (
     <View style={styles.container}>
       <Logo />
+      <Text style={styles.intro}>Retrouvez vos parties en cours</Text>
+
       <View style={styles.centerContainer}>
         {partieActuelle ? (
           <View style={styles.partieContainer}>
@@ -57,6 +59,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#5D726F",
+  },
+  intro: {
+    fontFamily: "LeagueSpartan_700Bold",
+    fontSize: 20,
+    textAlign: "center",
+    lineHeight: 25,
+    justifyContent: "center",
+    paddingHorizontal: "10%",
+    paddingVertical: "5%",
+    marginTop: "4%",
+    textShadowColor: "#efefef",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
   },
   partieContainer: {
     textAlign: "center",

@@ -20,22 +20,21 @@ const SignUp = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
 
-
   const handleSignUp = () => {
     // if (!username === "" && !password === "") { {
     fetch("https://gamemaster-backend.vercel.app/users/signup", {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username: username, password: password }),
     })
-      .then(response => {
-        return response.json()
+      .then((response) => {
+        return response.json();
       })
-      .then(data => {
+      .then((data) => {
         if (data.result) {
           dispatch(signup({ username: username, token: data.token }));
-          setUsername('');
-          setPassword('');
+          setUsername("");
+          setPassword("");
           navigation.navigate("MesParties");
         }
       });
@@ -47,25 +46,28 @@ const SignUp = ({ navigation }) => {
 
   return (
     // Modifier le style de KeyboardAvoidingView si besoin
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
-      <View style={styles.container}>
-        <Logo />
-
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <Logo />
+      <View style={styles.centerContainer}>
         <Text style={styles.label}>Nom d'utilisateur:</Text>
         <TextInput
-          placeholder="Username"
+          style={styles.input}
+          placeholder="Nom d'utilisateur"
           autoCapitalize="none" // Tells TextInput to automatically capitalize certain characters.
           keyboardType="default" // Determines which keyboard to open, e.g.numeric.
           textContentType="username" // **iOS** Give the keyboard and the system information about the expected semantic meaning for the content that users enter.
           autoComplete="username" // Specifies autocomplete hints for the system, so it can provide autofill.
           onChangeText={(value) => setUsername(value)}
           value={username}
-          style={styles.input}
         />
 
         <Text style={styles.label}>Mot de passe:</Text>
         <TextInput
-          placeholder="Password"
+          style={styles.input}
+          placeholder="Mot de passe"
           secureTextEntry={true}
           autoCapitalize="none" // Tells TextInput to automatically capitalize certain characters.
           keyboardType="default" // Determines which keyboard to open, e.g.numeric.
@@ -73,15 +75,15 @@ const SignUp = ({ navigation }) => {
           autoComplete="current-password" // Specifies autocomplete hints for the system, so it can provide autofill.
           onChangeText={(value) => setPassword(value)}
           value={password}
-          style={styles.input}
         />
 
-        {error && <Text style={styles.error}>Merci de renseigner tous les champs</Text>}
+        {error && (
+          <Text style={styles.error}>Merci de renseigner tous les champs</Text>
+        )}
 
         <TouchableOpacity style={styles.button} onPress={handleSignUp}>
           <Text style={styles.buttonText}>S'inscrire</Text>
         </TouchableOpacity>
-
       </View>
     </KeyboardAvoidingView>
   );
@@ -105,7 +107,7 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: "#efefef",
     paddingVertical: "5%",
-    paddingHorizontal: "15%",
+    paddingHorizontal: "30%",
     borderRadius: 8,
     marginBottom: "4%",
     fontFamily: "LeagueSpartan_500Medium",
@@ -113,7 +115,7 @@ const styles = StyleSheet.create({
   centerContainer: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: "20%",
+    marginTop: "30%",
   },
   button: {
     backgroundColor: "#efefef",
@@ -130,6 +132,12 @@ const styles = StyleSheet.create({
     fontFamily: "LeagueSpartan_700Bold",
     fontSize: 18,
     fontWeight: "bold",
+  },
+  error: {
+    fontFamily: "LeagueSpartan_700Bold",
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#000",
   },
 });
 

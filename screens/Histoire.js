@@ -7,7 +7,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Logo from "../components/Logo";
 import { saveOnboardingData } from "../reducers/game";
 

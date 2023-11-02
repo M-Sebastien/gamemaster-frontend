@@ -45,47 +45,43 @@ export default function Connexion({ navigation }) {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <View style={styles.container}>
-        <Logo />
-        <View style={styles.centerContainer}>
-          <Text style={styles.label}>Nom d'utilisateur</Text>
-          <TextInput
-            placeholder="Username"
-            autoCapitalize="none" // Tells TextInput to automatically capitalize certain characters.
-            keyboardType="default" // Determines which keyboard to open, e.g.numeric.
-            textContentType="username" // **iOS** Give the keyboard and the system information about the expected semantic meaning for the content that users enter.
-            autoComplete="username" // Specifies autocomplete hints for the system, so it can provide autofill.
-            onChangeText={(value) => setUsername(value)}
-            value={username}
-            style={styles.input}
-          />
+      <Logo />
+      <View style={styles.centerContainer}>
+        <Text style={styles.label}>Nom d'utilisateur</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Nom d'utilisateur"
+          autoCapitalize="none" // Tells TextInput to automatically capitalize certain characters.
+          keyboardType="default" // Determines which keyboard to open, e.g.numeric.
+          textContentType="username" // **iOS** Give the keyboard and the system information about the expected semantic meaning for the content that users enter.
+          autoComplete="username" // Specifies autocomplete hints for the system, so it can provide autofill.
+          onChangeText={(value) => setUsername(value)}
+          value={username}
+        />
 
-          <Text style={styles.label}>Mot de passe</Text>
-          <TextInput
-            placeholder="Password"
-            secureTextEntry={true}
-            autoCapitalize="none" // Tells TextInput to automatically capitalize certain characters.
-            keyboardType="default" // Determines which keyboard to open, e.g.numeric.
-            textContentType="password" // **iOS** Give the keyboard and the system information about the expected semantic meaning for the content that users enter.
-            autoComplete="current-password" // Specifies autocomplete hints for the system, so it can provide autofill.
-            onChangeText={(value) => setPassword(value)}
-            value={password}
-            style={styles.input}
-          />
+        <Text style={styles.label}>Mot de passe</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Mot de passe"
+          secureTextEntry={true}
+          autoCapitalize="none" // Tells TextInput to automatically capitalize certain characters.
+          keyboardType="default" // Determines which keyboard to open, e.g.numeric.
+          textContentType="password" // **iOS** Give the keyboard and the system information about the expected semantic meaning for the content that users enter.
+          autoComplete="current-password" // Specifies autocomplete hints for the system, so it can provide autofill.
+          onChangeText={(value) => setPassword(value)}
+          value={password}
+        />
 
-          {error && (
-            <Text style={styles.error}>
-              Merci de renseigner tous les champs
-            </Text>
-          )}
+        {error && (
+          <Text style={styles.error}>Merci de renseigner tous les champs</Text>
+        )}
 
-          <TouchableOpacity style={styles.button} onPress={handleLogin}>
-            <Text style={styles.buttonText}>Se connecter</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Se connecter</Text>
+        </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
   );
@@ -94,8 +90,6 @@ export default function Connexion({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
     backgroundColor: "#5D726F",
   },
   label: {
@@ -104,11 +98,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: "5%",
     marginTop: "5%",
+    textShadowColor: "#efefef",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
   },
   input: {
     backgroundColor: "#efefef",
     paddingVertical: "5%",
-    paddingHorizontal: "15%",
+    paddingHorizontal: "30%",
     borderRadius: 8,
     marginBottom: "4%",
     fontFamily: "LeagueSpartan_500Medium",
@@ -116,7 +113,7 @@ const styles = StyleSheet.create({
   centerContainer: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: "20%",
+    marginTop: "30%",
   },
   button: {
     backgroundColor: "#efefef",
@@ -133,23 +130,11 @@ const styles = StyleSheet.create({
     fontFamily: "LeagueSpartan_700Bold",
     fontSize: 18,
     fontWeight: "bold",
-    backgroundColor: "#e8e8e8",
-    color: "#000000",
-    paddingVertical: 20,
-    paddingHorizontal: 105,
-    borderWidth: 2,
-    borderColor: "#000000",
-    textAlign: "center",
-    borderRadius: 12,
-    marginTop: 40,
-  },
-  textButton: {
-    fontSize: 17,
-    fontWeight: "bold",
-    color: "#000000",
   },
   error: {
-    marginTop: 10,
-    color: "red",
+    fontFamily: "LeagueSpartan_700Bold",
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#000",
   },
 });
