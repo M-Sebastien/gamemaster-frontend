@@ -1,12 +1,24 @@
-import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Button,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ScrollView,
+} from "react-native";
 import Logo from "../components/Logo";
 import { useDispatch, useSelector } from "react-redux";
 import { updateAction } from "../reducers/game";
 import { useState } from "react";
 import ActionsGpt from "../Gpt-components/ActionsGpt";
+import Spinner from "../components/Spinner";
 
 export default function ActionsHistoire({ navigation }) {
   const dispatch = useDispatch();
+
+  // const [loading, setLoading] = useState(true);
+  // setLoading(true);
+  // setLoading(false);
 
   const Suivant = () => {
     dispatch(updateAction);
@@ -14,7 +26,10 @@ export default function ActionsHistoire({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
+    // loading ? (
+    //   <Spinner />
+    // ) : (
+    <ScrollView style={styles.container}>
       <Logo />
       <Text style={styles.intro}>Quelle action choisit le joueur 1?</Text>
 
@@ -44,7 +59,7 @@ export default function ActionsHistoire({ navigation }) {
           <Text style={styles.buttonText}>Générer la suite de l'histoire</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
