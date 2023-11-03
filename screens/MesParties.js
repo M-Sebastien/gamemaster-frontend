@@ -1,49 +1,67 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { selectedStory } from "../reducers/game";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Logo from "../components/Logo";
 
+
 const MesParties = () => {
-  const [parties, setParties] = useState([]);
-  const [partieActuelle, setPartieActuelle] = useState(null);
+
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.user.value.token);
   const navigation = useNavigation();
 
-  const partiesEnregistrees = [
-    { id: 1, titre: "Partie 1" },
-    { id: 2, titre: "Partie 2" },
-    // ... autres parties enregistrées
-  ];
+  const [storiesData, setStoriesData] = useState([]);
 
   useEffect(() => {
-    if (partiesEnregistrees.length > 0) {
-      setPartieActuelle(partiesEnregistrees[0]);
-      setParties(partiesEnregistrees);
-    }
+    fetch(
+      `https://gamemaster-backend.vercel.app/stories/getStoriesByToken/${token}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        setStoriesData(data.stories);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
-  const commencerPartie = () => {
-    console.log("Partie commencée:");
-    // Mettez en œuvre le code pour commencer la partie ici, peut-être naviguer vers un écran de jeu
+  const handleValidation = () => {
     navigation.navigate("CreationJoueurs");
+  };
+
+  const handleStorySelection = (selectedStory) => {
+    navigation.navigate("Histoire", { story: selectedStory });
+  };
+
+  const renderStoryButtons = () => {
+    return storiesData.map((story, index) => (
+      <TouchableOpacity
+        key={index}
+        style={styles.partieContainer}
+        onPress={() => handleStorySelection(story)}
+      >
+        <Text style={styles.buttonText}>{story.context.title}</Text>
+      </TouchableOpacity>
+    ));
+
   };
 
   return (
     <View style={styles.container}>
       <Logo />
       <View style={styles.centerContainer}>
-        {partieActuelle ? (
-          <View style={styles.partieContainer}>
-            <Text style={styles.titrePartie}>{partieActuelle.titre}</Text>
-          </View>
+        <Text style={styles.intro}>Retrouvez ici vos parties en cours</Text>
+
+        {storiesData.length > 0 ? (
+          <View>{renderStoryButtons()}</View>
         ) : (
-          <Text>Aucune partie enregistrée.</Text>
+          <Text style={styles.intro}>Aucune partie enregistrée</Text>
         )}
-        <TouchableOpacity
-          style={styles.button}
-          onPress={commencerPartie}
-          disabled={!partieActuelle}
-        >
-          <Text style={styles.buttonText}>Commencer la partie</Text>
+
+        <TouchableOpacity style={styles.button} onPress={handleValidation}>
+          <Text style={styles.buttonText}>Nouvelle partie</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -54,14 +72,28 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#5D726F",
-    alignItems: "center",
+  },
+  intro: {
+    fontFamily: "LeagueSpartan_700Bold",
+    fontSize: 20,
+    textAlign: "center",
+    lineHeight: 25,
     justifyContent: "center",
+    paddingHorizontal: "10%",
+    paddingVertical: "15%",
+    marginTop: "0%",
+    textShadowColor: "#efefef",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 10,
   },
   partieContainer: {
     backgroundColor: "#efefef",
     padding: 10,
     borderRadius: 8,
-    marginVertical: 10,
+    marginBottom: "9%",
+    textShadowColor: "#efefef",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 10,
   },
   titrePartie: {
     fontFamily: "LeagueSpartan_700Bold",

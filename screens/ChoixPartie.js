@@ -6,6 +6,7 @@ import { saveOnboardingData } from "../reducers/game";
 
 export default function ChoixPartie({ navigation }) {
   const [niveau, setNiveau] = useState(null);
+
   const dispatch = useDispatch();
   
   const handleNiveauSelection = (selectedNiveau) => {
@@ -30,20 +31,22 @@ export default function ChoixPartie({ navigation }) {
       <View style={styles.buttonContainer}>
         <Text style={styles.intro}>Quel niveau pour cette partie?</Text>
         <TouchableOpacity
-          style={styles.button}
-          onPress={() => handleNiveauSelection("super débutant")}
+          style={
+            niveau === "super debutant" ? styles.buttonFocus : styles.button
+          }
+          onPress={() => handleNiveauSelection("super debutant")}
         >
           <Text>Super Débutant</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.button}
+          style={niveau === "moyen" ? styles.buttonFocus : styles.button}
           onPress={() => handleNiveauSelection("moyen")}
         >
           <Text>Moyen</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.button}
-          onPress={() => handleNiveauSelection("Chaud")}
+          style={niveau === "chaud" ? styles.buttonFocus : styles.button}
+          onPress={() => handleNiveauSelection("chaud")}
         >
           <Text>Chaud</Text>
         </TouchableOpacity>
@@ -72,6 +75,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: "10%",
     paddingVertical: "5%",
     marginTop: "4%",
+    textShadowColor: "#efefef",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 10,
   },
   buttonContainer: {
     justifyContent: "center",
@@ -80,6 +86,15 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "#efefef",
+    paddingVertical: "5%",
+    paddingHorizontal: "15%",
+    borderRadius: 8,
+    marginTop: "7%",
+    width: 300,
+    alignItems: "center",
+  },
+  buttonFocus: {
+    backgroundColor: "#859393",
     paddingVertical: "5%",
     paddingHorizontal: "15%",
     borderRadius: 8,

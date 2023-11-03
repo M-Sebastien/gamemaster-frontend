@@ -1,5 +1,11 @@
 import React from "react";
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
 import Logo from "../components/Logo";
@@ -33,7 +39,8 @@ console.log("store ------------------", store)
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView style={styles.container}>
+
       <Logo />
       <Text style={styles.intro}>Voici le début de votre histoire</Text>
       <View style={styles.cardContainer}>
@@ -57,17 +64,21 @@ console.log("store ------------------", store)
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    flex: 1,
     backgroundColor: "#5D726F",
-    justifyContent: "center",
-    alignItems: "center",
   },
   intro: {
     fontFamily: "LeagueSpartan_700Bold",
     fontSize: 20,
     textAlign: "center",
-    marginHorizontal: 20,
-    marginVertical: 20,
+    lineHeight: 25,
+    justifyContent: "center",
+    paddingHorizontal: "10%",
+    paddingVertical: "5%",
+    marginTop: "4%",
+    textShadowColor: "#efefef",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 10,
   },
   cardContainer: {
     width: "100%",

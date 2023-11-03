@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Text, TouchableOpacity, View, StyleSheet, ScrollView } from "react-native";
-import Logo from "../components/Logo";
 import { useDispatch, useSelector } from "react-redux";
 import { updateStorySuite, updateAction } from "../reducers/game";
 import { useFetchGpt } from "../hooks/useFetchGpt";
+import {
+  Button,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ScrollView,
+} from "react-native";
+import Logo from "../components/Logo";
+import Spinner from "../components/Spinner";
 
 export default function ActionsHistoire({ navigation }) {
   const dispatch = useDispatch();
+  const [loading, setLoading]  = useState(false);
   const [choices, setChoices] = useState(new Array(3).fill("En attente..."));
   const context = useSelector((state) => state.game.context);
   const action = useSelector((state) => state.game.story?.action);
@@ -65,59 +74,91 @@ export default function ActionsHistoire({ navigation }) {
     } catch (error) {
       console.error("Une erreur s'est produite :", error);
       // Gérer l'erreur si nécessaire
-    }
-  };
+    }};
 
-  return (
-    <View style={styles.container}>
-      <Logo />
-      <Text>Suite de l'histoire</Text>
-      <Text>Actions:</Text>
-      {choices.map((choice, index) => (
-        <ScrollView key={index} style={[styles.button, styles.largeButton]} contentContainerStyle={styles.scrollViewContent}>
-          <TouchableOpacity onPress={() => saveChoice(index)}>
-            <Text style={styles.buttonText}>{`Choix ${index + 1}: ${choice}`}</Text>
-          </TouchableOpacity>
-        </ScrollView>
-      ))}
-      <TouchableOpacity style={[styles.suivantButton, styles.largeButton]} onPress={Suivant}>
-        <Text style={styles.buttonText}>Suivant</Text>
-      </TouchableOpacity>
-    </View>
-  );
-}
+
+
+    return loading ? (
+        <Spinner />
+      ) : (
+        <View style={styles.container}>
+          <Text style={styles.intro}>Quelle action choisit le joueur 1?</Text>
+    
+          <View style={styles.buttonContainer}>
+              <Text>
+                {choices.map((choice, index) => (
+                  <ScrollView key={index} style={styles.card} contentContainerStyle={styles.scrollViewContent}>
+                    <TouchableOpacity onPress={() => saveChoice(index)}>
+                      <Text style={styles.buttonText}>{`Choix ${index + 1}: ${choice}`}</Text>
+                    </TouchableOpacity>
+                  </ScrollView>
+                ))}
+              </Text>
+    
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate("Histoire")}
+            >
+              <Text style={styles.buttonText}>Générer la suite de l'histoire</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )
+    };
+    
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#5D726F",
+  },
+  intro: {
+    fontFamily: "LeagueSpartan_700Bold",
+    fontSize: 20,
+    textAlign: "center",
+    lineHeight: 25,
     justifyContent: "center",
+    paddingHorizontal: "10%",
+    paddingVertical: "5%",
+    marginTop: "4%",
+    textShadowColor: "#efefef",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 10,
+  },
+  cardContainer: {
+    width: "100%",
     alignItems: "center",
   },
-  suivantButton: {
-    backgroundColor: "#2E7D32",
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 20,
+  card: {
+    fontFamily: "LeagueSpartan_500Medium",
+    fontSize: 20,
+    backgroundColor: "#efefef",
+    padding: "5%",
+    borderRadius: 8,
+    marginBottom: "8%",
+    maxWidth: "80%",
+    maxHeight: "40%",
   },
-  largeButton: {
-    width: 200,
-    height: 60,
-    marginVertical: 10,
+  buttonContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: "10%",
   },
   button: {
-    backgroundColor: "#DDDDDD",
-    padding: 10,
-    borderRadius: 5,
+    backgroundColor: "#efefef",
+    paddingVertical: "5%",
+    paddingHorizontal: "15%",
+    borderRadius: 8,
+    marginTop: "7%",
+    elevation: "5%",
+    shadowColor: "#000",
+    shadowOpacity: "3%",
+    shadowOffset: { width: 0, height: 2 },
   },
   buttonText: {
-    color: "black",
-    textAlign: "center",
-    fontSize: 16,
-  },
-  scrollViewContent: {
-    justifyContent: "center",
-    alignItems: "center",
+    fontFamily: "LeagueSpartan_700Bold",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });
 

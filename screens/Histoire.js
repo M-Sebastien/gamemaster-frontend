@@ -1,5 +1,12 @@
+
 import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import Logo from '../components/Logo';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateAction } from '../reducers/game';
@@ -53,14 +60,57 @@ export default function Histoire({ navigation }) {
     // Vous pouvez ajouter ici une logique pour charger l'histoire pour le tour actuel au chargement du composant, si nécessaire
   }, []);
 
-  return (
-    <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-      <View style={styles.container}>
-        <Logo />
-        <Text>Suite de l'histoire</Text>
-        <Text>{previousStory}</Text>
-        <TouchableOpacity style={styles.suivantButton} onPress={() => Suivant()}>
-          <Text style={styles.buttonText}>Suivant</Text>
+  
+
+
+
+
+  function saveGame() {
+    setLoading(true);
+    fetch(`https://gamemaster-backend.vercel.app/stories/saveStory/${token}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        context: {
+          title: game.context.title,
+          initialStory: game.context.initialStory,
+          players: game.context.players,
+          onBoardingData: game.context.onBoardingData,
+        },
+        story: game.story,
+      }),
+    })
+      .then((response) => {
+        console.log(response);
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setLoading(false);
+        navigation.navigate("MesParties");
+      });
+  }
+
+  return loading ? (
+    <Spinner />
+  ) : (
+    <ScrollView style={styles.container}>
+      <Logo />
+      <Text style={styles.intro}>Découvrez la suite de l'histoire</Text>
+      <View style={styles.cardContainer}>
+        <View style={styles.card}>
+          <Text>{previousStory}</Text> 
+        </View>
+      </View>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => Suivant()}
+        >
+          <Text style={styles.buttonText}>Suite</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => saveGame()}>
+          <Text style={styles.buttonText}>Sauvegarder la partie</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -68,32 +118,56 @@ export default function Histoire({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  scrollViewContainer: {
-    flexGrow: 1,
-    backgroundColor: 'white',
-    paddingVertical: 20,
-    paddingHorizontal: 15,
-  },
   container: {
     backgroundColor: "#5D726F",
     paddingBottom: 20,
   },
-  suivantButton: {
-    backgroundColor: "#2E7D32",
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 20,
+  intro: {
+    fontFamily: "LeagueSpartan_700Bold",
+    fontSize: 20,
+    textAlign: "center",
+    lineHeight: 25,
+    justifyContent: "center",
+    paddingHorizontal: "10%",
+    paddingVertical: "5%",
+    marginTop: "4%",
+    textShadowColor: "#efefef",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 10,
+  },
+  cardContainer: {
+    width: "100%",
+    alignItems: "center",
+  },
+  card: {
+    fontFamily: "LeagueSpartan_500Medium",
+    fontSize: 20,
+    backgroundColor: "#efefef",
+    padding: "5%",
+    borderRadius: 8,
+    marginBottom: "5%",
+    width: "90%",
+  },
+  buttonContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: "10%",
+  },
+  button: {
+    backgroundColor: "#efefef",
+    paddingVertical: "5%",
+    paddingHorizontal: "15%",
+    borderRadius: 8,
+    marginTop: "7%",
+    elevation: "5%",
+    shadowColor: "#000",
+    shadowOpacity: "3%",
+    shadowOffset: { width: 0, height: 2 },
   },
   buttonText: {
-    color: "white",
-    textAlign: "center",
-    fontSize: 16,
-  },
-  storyText: {
-    color: "black", // Couleur du texte provenant du store Redux
-  },
-  newGptResponse: {
-    color: "red", // Couleur du texte provenant de la réponse la plus récente de GPT
+    fontFamily: "LeagueSpartan_700Bold",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });
 

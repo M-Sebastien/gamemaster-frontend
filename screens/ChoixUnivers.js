@@ -63,19 +63,19 @@ export default function ChoixUnivers() {
           Dans quel univers se passe votre aventure?
         </Text>
         <TouchableOpacity
-          style={styles.button}
+          style={univers === "montagne" ? styles.buttonFocus : styles.button}
           onPress={() => handleUniversSelection("montagne")}
         >
           <Text>Montagne</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.button}
+          style={univers === "forêt" ? styles.buttonFocus : styles.button}
           onPress={() => handleUniversSelection("forêt")}
         >
           <Text>Forêt</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.button}
+          style={univers === "ville" ? styles.buttonFocus : styles.button}
           onPress={() => handleUniversSelection("ville")}
         >
           <Text>Ville</Text>
@@ -102,6 +102,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: "10%",
     paddingVertical: "5%",
     marginTop: "4%",
+    textShadowColor: "#efefef",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 10,
   },
   buttonContainer: {
     justifyContent: "center",
@@ -110,6 +113,15 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "#efefef",
+    paddingVertical: "5%",
+    paddingHorizontal: "15%",
+    borderRadius: 8,
+    marginTop: "7%",
+    width: 300,
+    alignItems: "center",
+  },
+  buttonFocus: {
+    backgroundColor: "#859393",
     paddingVertical: "5%",
     paddingHorizontal: "15%",
     borderRadius: 8,

@@ -1,5 +1,5 @@
 import React from "react";
-import { StatusBar, View } from "react-native";
+import { StatusBar } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -19,6 +19,7 @@ import ActionsHistoire from "./screens/ActionsHistoire";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import game from "./reducers/game";
+import user from './reducers/user';
 
 
 import {
@@ -28,13 +29,11 @@ import {
   LeagueSpartan_700Bold,
 } from "@expo-google-fonts/league-spartan";
 
-const Stack = createNativeStackNavigator();
-
 const store = configureStore({
-  reducer: {
-    game, // Ajoutez votre reducer au magasin
-  },
+  reducer: { user, game }
 });
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   let [fontsLoaded, fontError] = useFonts({
