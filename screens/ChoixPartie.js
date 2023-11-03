@@ -8,12 +8,20 @@ export default function ChoixPartie({ navigation }) {
   const [niveau, setNiveau] = useState(null);
 
   const dispatch = useDispatch();
-  const handleNiveauSelection = (niveau) => {
-    setNiveau(niveau);
+  
+  const handleNiveauSelection = (selectedNiveau) => {
+    setNiveau(selectedNiveau);
+    console.log("Niveau sélectionné :", selectedNiveau);
   };
 
-  const Suivant = (niveau) => {
+  const Suivant = () => {
+    if (!niveau) {
+      console.error("Veuillez sélectionner un niveau pour cette partie !");
+      return; // Arrêter la fonction si aucun niveau n'est sélectionné
+    }
+
     dispatch(saveOnboardingData(niveau));
+    console.log("Données sauvegardées :", niveau);
     navigation.navigate("ChoixStyle");
   };
 
@@ -44,7 +52,7 @@ export default function ChoixPartie({ navigation }) {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.suivantButton}
-          onPress={() => Suivant(niveau)}
+          onPress={Suivant}
         >
           <Text style={styles.buttonText}>Suivant</Text>
         </TouchableOpacity>
@@ -100,9 +108,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: "15%",
     borderRadius: 8,
     marginTop: "7%",
-    elevation: "5%",
+    elevation: 5,
     shadowColor: "#000",
-    shadowOpacity: "3%",
+    shadowOpacity: 0.3,
     shadowOffset: { width: 0, height: 2 },
   },
   buttonText: {

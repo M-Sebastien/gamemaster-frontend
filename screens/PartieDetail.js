@@ -7,68 +7,60 @@ import {
   ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Logo from "../components/Logo";
-import { saveOnboardingData } from "../reducers/game";
+import { updateChoices } from "../reducers/game";
+import { useFetchGpt } from "../hooks/useFetchGpt"; // Import de l'action updateAction
 
-export default function PartieDetail() {
-  const dispatch = useDispatch();
+const PartieDetail = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
-  const PartieDetail = (joueur) => {
-    dispatch(saveOnboardingData(joueur));
-    navigation.navigate("ActionsHistoire");
+  const story = useSelector((state) => state.game.context.initialStory);
+  const context = useSelector((state) => state.game.context);
+  const store = useSelector((state) => state.game);
+  const player = useSelector((state) => state.game.context.players[0]);
+console.log("store ------------------", store)
+  const goToActionsHistoire = async () => {
+    try {
+      const response = await useFetchGpt(
+        `Tu crées 3 actions pour chaque personnage de cette ${story}. Je veux que tu génères les actions uniquement pour ce personnage : ${player.name}, je veux que tu me les sortes sous forme de liste, sans commentaire.`,
+        200,
+        `Tu es mon assistant game-master qui connaît sur le bout des doigts l'univers de donjon et dragon, voici le contexte de l'histoire en cours : ${context}`
+      );
+      
+      // Mettre à jour les actions enregistrées
+      const actions = response.gptResponse.split(/[0-9]./).slice(1, -1); // Obtention des actions
+      dispatch(updateChoices(actions)); // Mettre à jour l'action dans Redux
+      navigation.navigate("ActionsHistoire");
+    } catch (error) {
+      console.error("Une erreur s'est produite :", error);
+    }
   };
 
   return (
     <ScrollView style={styles.container}>
+
       <Logo />
       <Text style={styles.intro}>Voici le début de votre histoire</Text>
       <View style={styles.cardContainer}>
         <View style={styles.card}>
           <Text style={styles.text}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum
-            dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-            veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-            ea commodo consequat. Duis aute irure dolor in reprehenderit in
-            voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-            officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit
-            amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt
-            ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-            consequat. Duis aute irure dolor in reprehenderit in voluptate velit
-            esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-            cupidatat non proident, sunt in culpa qui officia deserunt mollit
-            anim id est laborum. Lorem ipsum dolor sit amet, consectetur
-            adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-            exercitation ullamco laboris nisi ut aliquip ex ea commodo
-            consequat. Duis aute irure dolor in reprehenderit in voluptate velit
-            esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-            cupidatat non proident, sunt in culpa qui officia deserunt mollit
-            anim id est laborum.
+            {story}
           </Text>
         </View>
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate("ActionsHistoire")}
+          onPress={() => goToActionsHistoire()}
         >
           <Text style={styles.buttonText}>Suite</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -96,30 +88,35 @@ const styles = StyleSheet.create({
     fontFamily: "LeagueSpartan_500Medium",
     fontSize: 20,
     backgroundColor: "#efefef",
-    padding: "5%",
+    padding: 20,
     borderRadius: 8,
-    marginBottom: "5%",
+    marginBottom: 20,
     width: "90%",
   },
   buttonContainer: {
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: "10%",
+    marginBottom: 40,
   },
   button: {
     backgroundColor: "#efefef",
-    paddingVertical: "5%",
-    paddingHorizontal: "15%",
+    padding: 15,
     borderRadius: 8,
-    marginTop: "7%",
-    elevation: "5%",
-    shadowColor: "#000",
-    shadowOpacity: "3%",
-    shadowOffset: { width: 0, height: 2 },
+    elevation: 5,
   },
   buttonText: {
     fontFamily: "LeagueSpartan_700Bold",
     fontSize: 18,
     fontWeight: "bold",
   },
+  text: {
+    fontFamily: "LeagueSpartan_500Medium",
+    fontSize: 16,
+    textAlign: "left",
+  },
 });
+
+export default PartieDetail;
+
+
+

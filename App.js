@@ -1,5 +1,5 @@
 import React from "react";
-import { StatusBar, View } from "react-native";
+import { StatusBar } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -20,7 +20,7 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import game from "./reducers/game";
 import user from './reducers/user';
-import ActionsGpt from "./Gpt-components/ActionsGpt";
+
 
 import {
   useFonts,
@@ -48,24 +48,25 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <StatusBar hidden={false} />
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Menu" component={Menu} />
-          <Stack.Screen name="Connexion" component={Connexion} />
-          <Stack.Screen name="SignUp" component={SignUp} />
-          <Stack.Screen name="MesParties" component={MesParties} />
-          <Stack.Screen name="CreationJoueurs" component={CreationJoueurs} />
-          <Stack.Screen name="ChoixDuree" component={ChoixDuree} />
-          <Stack.Screen name="ChoixStyle" component={ChoixStyle} />
-          <Stack.Screen name="ChoixUnivers" component={ChoixUnivers} />
-          <Stack.Screen name="BulletPoint" component={BulletPoint} />
-          <Stack.Screen name="PartieDetail" component={PartieDetail} />
-          <Stack.Screen name="ChoixPartie" component={ChoixPartie} />
-          <Stack.Screen name="Histoire" component={Histoire} />
-          <Stack.Screen name="ActionsHistoire" component={ActionsHistoire} />
-        </Stack.Navigator>
-      </NavigationContainer>
+     <NavigationContainer>
+      <StatusBar hidden={false} />
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Menu" component={Menu} />
+         <Stack.Screen name="Connexion" component={Connexion} />
+        <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen name="MesParties" component={MesParties} />
+        <Stack.Screen name="CreationJoueurs" component={CreationJoueurs} />
+        <Stack.Screen name="ChoixDuree" component={ChoixDuree} />
+        <Stack.Screen name="ChoixPartie" component={ChoixPartie} />
+        <Stack.Screen name="ChoixStyle" component={ChoixStyle} />
+        <Stack.Screen name="ChoixUnivers" component={ChoixUnivers} />
+        <Stack.Screen name="BulletPoint" component={BulletPoint} />
+        <Stack.Screen name="PartieDetail" component={PartieDetail} />
+        <Stack.Screen name="Histoire" component={Histoire} />
+        <Stack.Screen name="ActionsHistoire" component={ActionsHistoire} />
+       
+      </Stack.Navigator>
+    </NavigationContainer>
     </Provider>
   );
 }

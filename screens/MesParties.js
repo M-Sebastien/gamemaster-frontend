@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { selectedStory } from "../reducers/game";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Logo from "../components/Logo";
 
+
 const MesParties = () => {
+
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.value.token);
   const navigation = useNavigation();
@@ -42,6 +45,7 @@ const MesParties = () => {
         <Text style={styles.buttonText}>{story.context.title}</Text>
       </TouchableOpacity>
     ));
+
   };
 
   return (
@@ -83,10 +87,8 @@ const styles = StyleSheet.create({
     textShadowRadius: 10,
   },
   partieContainer: {
-    textAlign: "center",
     backgroundColor: "#efefef",
-    paddingVertical: "5%",
-    paddingHorizontal: "15%",
+    padding: 10,
     borderRadius: 8,
     marginBottom: "9%",
     textShadowColor: "#efefef",
@@ -97,21 +99,16 @@ const styles = StyleSheet.create({
     fontFamily: "LeagueSpartan_700Bold",
     fontSize: 18,
     fontWeight: "bold",
+    textAlign: "center",
   },
   centerContainer: {
-    justifyContent: "center",
     alignItems: "center",
   },
   button: {
     backgroundColor: "#efefef",
-    paddingVertical: "5%",
-    paddingHorizontal: "15%",
+    padding: 10,
     borderRadius: 8,
-    marginTop: "7%",
-    elevation: "5%",
-    shadowColor: "#000",
-    shadowOpacity: "3%",
-    shadowOffset: { width: 0, height: 2 },
+    marginTop: 20,
   },
   buttonText: {
     fontFamily: "LeagueSpartan_700Bold",

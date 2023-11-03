@@ -1,20 +1,55 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { useDispatch } from "react-redux";
-import { saveOnboardingData } from "../reducers/game";
+import { useDispatch, useSelector } from "react-redux";
+import { addCharacters, saveOnboardingData } from "../reducers/game";
 import Logo from "../components/Logo";
+import { useFetchGpt } from "../hooks/useFetchGpt";
 
 export default function ChoixDuree({ navigation }) {
   const [duree, setDuree] = useState(null);
 
+  const players = useSelector(state => state.game.context.players);
   const dispatch = useDispatch();
-  const handleDureeSelection = (duree) => {
+
+  const handleDureeSelection = duree => {
     setDuree(duree);
+    console.log("Durée sélectionnée :", duree);
   };
 
-  const Suivant = (duree) => {
-    dispatch(saveOnboardingData(duree));
-    navigation.navigate("ChoixPartie");
+  const generatePlayersPrompt = () => {
+    const playerDetails = players
+      .map(player => `Le joueur "${player.name}" joue le personnage "${player.character}"`)
+      .join(", ");
+    return playerDetails;
+  };
+
+  const Suivant = async () => {
+    if (!duree) {
+      console.error("Veuillez sélectionner une durée pour la partie !");
+      return;
+    }
+
+    try {
+      console.log("Joueurs sélectionnés :", players);
+      navigation.navigate("ChoixPartie");
+
+      const playerDetails = generatePlayersPrompt();
+
+      const response = await useFetchGpt(
+        `Connecte ces joueurs avec = ${playerDetails}, les personnages sont aléatoires, mais une seule phrase de description par personnage. Après la création des personnages, arrête-toi.`,
+        200,
+        "Tu es mon assistant game-master qui connaît sur le bout des doigts l'univers de donjon et dragon"
+      );
+
+      dispatch(saveOnboardingData(duree));
+      console.log("Données sauvegardées :", duree);
+
+      dispatch(addCharacters(response));
+      console.log(response);
+    } catch (error) {
+      console.error("Une erreur s'est produite :", error);
+      // Gérer l'erreur si nécessaire
+    }
   };
 
   return (
@@ -40,10 +75,7 @@ export default function ChoixDuree({ navigation }) {
         >
           <Text>Longue</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.suivantButton}
-          onPress={() => Suivant(duree)}
-        >
+        <TouchableOpacity style={styles.suivantButton} onPress={Suivant}>
           <Text style={styles.buttonText}>Suivant</Text>
         </TouchableOpacity>
       </View>
@@ -72,14 +104,14 @@ const styles = StyleSheet.create({
   buttonContainer: {
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: "10%",
+    marginBottom: 10,
   },
   button: {
     backgroundColor: "#efefef",
-    paddingVertical: "5%",
-    paddingHorizontal: "15%",
+    paddingVertical: 5,
+    paddingHorizontal: 15,
     borderRadius: 8,
-    marginTop: "7%",
+    marginTop: 7,
     width: 300,
     alignItems: "center",
   },
@@ -94,13 +126,13 @@ const styles = StyleSheet.create({
   },
   suivantButton: {
     backgroundColor: "#efefef",
-    paddingVertical: "5%",
-    paddingHorizontal: "15%",
+    paddingVertical: 5,
+    paddingHorizontal: 15,
     borderRadius: 8,
-    marginTop: "7%",
-    elevation: "5%",
+    marginTop: 7,
+    elevation: 5,
     shadowColor: "#000",
-    shadowOpacity: "3%",
+    shadowOpacity: 0.3,
     shadowOffset: { width: 0, height: 2 },
   },
   buttonText: {
@@ -109,3 +141,4 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
+

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -6,25 +7,63 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { useDispatch, useSelector } from "react-redux";
-import Logo from "../components/Logo";
-import { saveOnboardingData } from "../reducers/game";
-import Spinner from "../components/Spinner";
+import Logo from '../components/Logo';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateAction } from '../reducers/game';
+import { useFetchGpt } from '../hooks/useFetchGpt';
 
-export default function Histoire() {
+export default function Histoire({ navigation }) {
   const dispatch = useDispatch();
-  const navigation = useNavigation();
+  const context = useSelector((state) => state.game.context);
+  const player = useSelector((state) => state.game.story[state.game.story.length -1].player);
+  const previousStory = useSelector((state) => state.game.story[state.game.story.length -1].story);
+   useEffect(() => {
+    console.log("store--------------------", previousStory)
+   },[])
+  const story = useSelector((state) => {
+    const stories = state.game.story && state.game.story.story; // Vérifiez que state.game.story est défini
+    const currentTurn = state.game.story && state.game.story.turn;
+  
+    if (stories && stories.length > 0 && currentTurn) {
+      const lastTurnStory = stories.find(story => story.turn === currentTurn);
+  
+      if (lastTurnStory) {
+        return lastTurnStory.text;
+      }
+    }
+  
+    return null;
+  });
 
-  const [loading, setLoading] = useState(true);
+  const Suivant = async () => {
+    try {
+      navigation.navigate("ActionsHistoire");
 
-  const game = useSelector((state) => state.game);
-  const token = useSelector((state) => state.user.value.token);
+      // Supposons que useFetchGpt effectue un appel asynchrone à une API pour obtenir des données
+      const response = await useFetchGpt(
+        `Tu crées 3 actions pour chaque personnage de cette ${story}. Je veux que tu génères les actions uniquement pour ce personnage : ${player}, en une phrase, sans commentaire et sans details`,
+        500,
+        `Tu es mon assistant game-master qui connaît sur le bout des doigts l'univers de donjon et dragon, voici le contexte de l'histoire en cours : ${context}`
+      );
 
-  const Histoire = (joueur) => {
-    dispatch(saveOnboardingData(joueur));
-    navigation.navigate("ActionsHistoire");
+      const newStory = response.gptResponse;
+      const currentTurn = 1; // Remplacez 1 par le numéro de tour actuel récupéré depuis votre state Redux
+
+      dispatch(updateAction({ text: newStory, turn: currentTurn }));
+      navigation.navigate("ActionsHistoire");
+    } catch (error) {
+      console.error("Une erreur s'est produite :", error);
+    }
   };
+
+  useEffect(() => {
+    // Vous pouvez ajouter ici une logique pour charger l'histoire pour le tour actuel au chargement du composant, si nécessaire
+  }, []);
+
+  
+
+
+
 
   function saveGame() {
     setLoading(true);
@@ -60,42 +99,13 @@ export default function Histoire() {
       <Text style={styles.intro}>Découvrez la suite de l'histoire</Text>
       <View style={styles.cardContainer}>
         <View style={styles.card}>
-          <Text style={styles.text}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum
-            dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-            veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-            ea commodo consequat. Duis aute irure dolor in reprehenderit in
-            voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-            officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit
-            amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt
-            ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-            consequat. Duis aute irure dolor in reprehenderit in voluptate velit
-            esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-            cupidatat non proident, sunt in culpa qui officia deserunt mollit
-            anim id est laborum. Lorem ipsum dolor sit amet, consectetur
-            adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-            exercitation ullamco laboris nisi ut aliquip ex ea commodo
-            consequat. Duis aute irure dolor in reprehenderit in voluptate velit
-            esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-            cupidatat non proident, sunt in culpa qui officia deserunt mollit
-            anim id est laborum.
-          </Text>
+          <Text>{previousStory}</Text> 
         </View>
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate("ActionsHistoire")}
+          onPress={() => Suivant()}
         >
           <Text style={styles.buttonText}>Suite</Text>
         </TouchableOpacity>
@@ -109,8 +119,8 @@ export default function Histoire() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#5D726F",
+    paddingBottom: 20,
   },
   intro: {
     fontFamily: "LeagueSpartan_700Bold",
@@ -160,3 +170,5 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
+
+

@@ -1,3 +1,7 @@
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { updateStorySuite, updateAction } from "../reducers/game";
+import { useFetchGpt } from "../hooks/useFetchGpt";
 import {
   Button,
   StyleSheet,
@@ -7,92 +11,101 @@ import {
   ScrollView,
 } from "react-native";
 import Logo from "../components/Logo";
-import { useDispatch, useSelector } from "react-redux";
-import { updateAction } from "../reducers/game";
-import { useState } from "react";
-import ActionsGpt from "../Gpt-components/ActionsGpt";
 import Spinner from "../components/Spinner";
 
 export default function ActionsHistoire({ navigation }) {
   const dispatch = useDispatch();
+  const [loading, setLoading]  = useState(false);
+  const [choices, setChoices] = useState(new Array(3).fill("En attente..."));
+  const context = useSelector((state) => state.game.context);
+  const action = useSelector((state) => state.game.story?.action);
+  const player = useSelector((state) => state.game.context.player);
+  const story = useSelector((state) => state.game.story);
 
-  // const [loading, setLoading] = useState(true);
-  // setLoading(true);
-  // setLoading(false);
+  const generateChoices = async () => {
+    const updatedChoices = [...choices];
 
-  const Suivant = () => {
-    dispatch(updateAction);
-    navigation.navigate("Histoire");
+    for (let i = 0; i < 3; i++) {
+      try {
+        const response = await useFetchGpt(
+          `Tu génères un choix d'action pour le joueur ${player} en fonction de ${context} et de la précédente histoire.`,
+          20,
+          `Tu es mon assistant game-master qui connaît sur le bout des doigts l'univers de donjon et dragon. Voici le contexte de l'histoire en cours : ${context} et la précédente histoire : ${story}`
+        );
+        updatedChoices[i] = response.gptResponse;
+        console.log("Réponse de GPT pour le choix", i, ":", response.gptResponse);
+      } catch (error) {
+        console.error("Une erreur s'est produite :", error);
+        // Gérer l'erreur si nécessaire
+        updatedChoices[i] = "Erreur lors de la génération du choix";
+      }
+    }
+
+    setChoices(updatedChoices);
   };
 
-  return (
-    // loading ? (
-    //   <Spinner />
-    // ) : (
-    <ScrollView style={styles.container}>
-      <Logo />
-      <Text style={styles.intro}>Quelle action choisit le joueur 1?</Text>
+  useEffect(() => {
+    generateChoices();
+  }, [story]); // Exécuté lorsque la "story" change dans le store
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={styles.card}
-          onPress={() => handleChoixSelection("Choix1")}
-        >
-          <Text>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem
-            ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
-            tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor
-            sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit
-            amet, consectetur adipiscing elit.
-          </Text>
-        </TouchableOpacity>
+  const saveChoice = (choixIndex) => {
+    try {
+      const selectedChoice = choices[choixIndex];
+      dispatch(updateAction(selectedChoice));
+      console.log("Choix sauvegardé :", selectedChoice);
+    } catch (error) {
+      console.error("Erreur lors de la sauvegarde du choix :", error);
+      // Gérer l'erreur si nécessaire
+    }
+  };
 
-        <TouchableOpacity
-          style={styles.card}
-          onPress={() => handleChoixSelection("Choix2")}
-        >
-          <Text>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem
-            ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
-            tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor
-            sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit
-            amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt
-            ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet,
-            consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
-            labore et dolore magna aliqua.
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.card}
-          onPress={() => handleChoixSelection("Choix3")}
-        >
-          <Text>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem
-            ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
-            tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor
-            sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit
-            amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt
-            ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet,
-            consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
-            labore et dolore magna aliqua.
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate("Histoire")}
-        >
-          <Text style={styles.buttonText}>Générer la suite de l'histoire</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
-  );
-}
+  const Suivant = async () => {
+    try {
+      navigation.navigate("Histoire");
+
+      const response = await useFetchGpt(
+        `Tu génères la suite de l'histoire en fonction de ${context} et du choix : ${action}.`,
+        200,
+        `Tu es mon assistant game-master qui connaît sur le bout des doigts l'univers de donjon et dragon. Voici le contexte de l'histoire en cours : ${context}`
+      );
+
+      dispatch(updateStorySuite(response.gptResponse));
+      console.log("Réponse de GPT pour la suite de l'histoire :", response.gptResponse);
+    } catch (error) {
+      console.error("Une erreur s'est produite :", error);
+      // Gérer l'erreur si nécessaire
+    }};
+
+
+
+    return loading ? (
+        <Spinner />
+      ) : (
+        <View style={styles.container}>
+          <Text style={styles.intro}>Quelle action choisit le joueur 1?</Text>
+    
+          <View style={styles.buttonContainer}>
+              <Text>
+                {choices.map((choice, index) => (
+                  <ScrollView key={index} style={styles.card} contentContainerStyle={styles.scrollViewContent}>
+                    <TouchableOpacity onPress={() => saveChoice(index)}>
+                      <Text style={styles.buttonText}>{`Choix ${index + 1}: ${choice}`}</Text>
+                    </TouchableOpacity>
+                  </ScrollView>
+                ))}
+              </Text>
+    
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate("Histoire")}
+            >
+              <Text style={styles.buttonText}>Générer la suite de l'histoire</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )
+    };
+    
 
 const styles = StyleSheet.create({
   container: {
@@ -148,3 +161,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
+
+
+
+
+
+

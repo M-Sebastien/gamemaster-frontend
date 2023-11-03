@@ -75,7 +75,7 @@ export default function Connexion({ navigation }) {
           <Text style={styles.error}>Merci de renseigner tous les champs</Text>
         )}
 
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <TouchableOpacity style={styles.button} onPress={() => handleLogin()}>
           <Text style={styles.buttonText}>Se connecter</Text>
         </TouchableOpacity>
       </View>

@@ -4,53 +4,64 @@ const initialState = {
   context: {
     title: "",
     initialStory: "",
-    players: [], // Supprimez la valeur initiale ici
+    players: [],
     onboardingData: [], // Ajoutez un tableau pour sauvegarder les choix des utilisateurs
   },
-  story: [
-    {
-      turn: 0, // Valeur initiale du tour
-      player: { name: "", character: "" },
-      story: "",
-      choices: [],
-      action: "",
-    },
-  ],
-};
+  story: []}
+  ;
 
 const gameSlice = createSlice({
   name: "game",
   initialState,
   reducers: {
-    // Action pour ajouter un joueur
-    addPlayer: (state, action) => {
-      if (state.context.players.length < 5) {
-        state.context.players.push({
-          name: `Joueur ${state.context.players.length + 1}`,
-          description: "",
-        });
-      }
-    },
-    removePlayer: (state, action) => {
-      state.context.players.splice(action.payload, 1);
-    },
-
-    // Action pour mettre à jour l'histoire
-    updateStory: (state, action) => {
-      state.story[0].story = action.payload;
-    },
-    // Action pour ajouter une action
-    updateAction: (state, action) => {
-      state.story[0].action.push(action.payload);
+    addCharacters: (state, action) => {
+      state.context.players.push(action.payload);
     },
 
     updatePlayers: (state, action) => {
       state.context.players = action.payload;
     },
 
-    // Action pour sauvegarder les choix des utilisateurs
+    updateStory: (state, action) => {
+      state.context.initialStory = action.payload;
+    },
+
+    updateChoices:(state, action) => {
+      if (state.story.length === 0 ) {
+      state.story.push({
+        turn: 0,
+      player: { name: state.context.players[0].name, character: ""},
+      story: action.payload,
+      choices: [],
+      action: "",
+      })
+      }
+      else {
+        state.story.push({
+          turn: state.story.length -1,
+        player: { name: state.context.players[state.context.players.indexOf(state.story[state.story.length -1].player) + 1].name
+          , character: ""},
+        story: "",
+        choices: action.payload,
+        action: "",
+        })
+      }
+    },
+
+    updateStorySuite: (state, action) => {
+      state.story[state.story.length -1].story = action.payload; // Remplacez les choix existants par les nouveaux
+    },
+
+    updateAction: (state, action) => {
+      state.story[state.story.length -1].action = action.payload; // Remplacez les actions existantes par les nouvelles
+    },
+
     saveOnboardingData: (state, action) => {
-      state.story[0].choices.push(action.payload);
+      state.context.onboardingData.push(action.payload);
+    },
+
+    addStory: (state, action) => {
+      state.story.push(action.payload);
     },
 
     selectedStory: (state, action) => {
@@ -60,12 +71,15 @@ const gameSlice = createSlice({
 });
 
 export const {
-  addPlayer,
-  removePlayer,
-  updateStory,
-  addAction,
-  saveOnboardingData,
+  addCharacters,
   updatePlayers,
-  selectedStory,
+  updateStory,
+  updateAction,
+  saveOnboardingData,
+  addStory,
+  updateChoices,
+  updateStorySuite,
+  selectedStory
 } = gameSlice.actions;
+
 export default gameSlice.reducer;
