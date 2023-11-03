@@ -3,17 +3,21 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import Logo from "../components/Logo";
-import { saveOnboardingData, updateStory, updateStorySuite } from "../reducers/game";
+import {
+  saveOnboardingData,
+  updateStory,
+  updateStorySuite,
+} from "../reducers/game";
 import { useFetchGpt } from "../hooks/useFetchGpt";
-
-
 
 export default function ChoixUnivers() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const context = useSelector((state) => state.game.context);
   const players = useSelector((state) => state.game.context.players);
-  const onboardingData = useSelector((state) => state.game.context.onboardingData);
+  const onboardingData = useSelector(
+    (state) => state.game.context.onboardingData
+  );
 
   const [univers, setUnivers] = useState(null);
 
@@ -35,7 +39,7 @@ export default function ChoixUnivers() {
       const response = await useFetchGpt(
         `Créer une histoire dans l'univers ${univers}. Il y a ${players.length} joueurs. 
         Contexte : ${onboardingData}. Soyez inventif !`,
-        200,
+        1000,
         `Tu es mon assistant game-master qui connaît sur le bout des doigts l'univers de donjon et dragon. 
         Voici le contexte de l'histoire en cours : ${context}`
       );
@@ -50,8 +54,6 @@ export default function ChoixUnivers() {
       console.error("Une erreur s'est produite :", error);
     }
   };
-
-
 
   return (
     <View style={styles.container}>
@@ -78,7 +80,10 @@ export default function ChoixUnivers() {
         >
           <Text>Ville</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.suivantButton} onPress={() => Suivant()}>
+        <TouchableOpacity
+          style={styles.suivantButton}
+          onPress={() => Suivant()}
+        >
           <Text style={styles.buttonText}>Suivant</Text>
         </TouchableOpacity>
       </View>

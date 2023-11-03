@@ -8,17 +8,20 @@ import { useFetchGpt } from "../hooks/useFetchGpt";
 export default function ChoixDuree({ navigation }) {
   const [duree, setDuree] = useState(null);
 
-  const players = useSelector(state => state.game.context.players);
+  const players = useSelector((state) => state.game.context.players);
   const dispatch = useDispatch();
 
-  const handleDureeSelection = duree => {
+  const handleDureeSelection = (duree) => {
     setDuree(duree);
     console.log("Durée sélectionnée :", duree);
   };
 
   const generatePlayersPrompt = () => {
     const playerDetails = players
-      .map(player => `Le joueur "${player.name}" joue le personnage "${player.character}"`)
+      .map(
+        (player) =>
+          `Le joueur "${player.name}" joue le personnage "${player.character}"`
+      )
       .join(", ");
     return playerDetails;
   };
@@ -103,14 +106,14 @@ const styles = StyleSheet.create({
   buttonContainer: {
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: "10%",
   },
   button: {
     backgroundColor: "#efefef",
-    paddingVertical: 5,
-    paddingHorizontal: 15,
+    paddingVertical: "5%",
+    paddingHorizontal: "15%",
     borderRadius: 8,
-    marginTop: 7,
+    marginTop: "7%",
     width: 300,
     alignItems: "center",
   },
@@ -125,10 +128,10 @@ const styles = StyleSheet.create({
   },
   suivantButton: {
     backgroundColor: "#efefef",
-    paddingVertical: 5,
-    paddingHorizontal: 15,
+    paddingVertical: "5%",
+    paddingHorizontal: "15%",
     borderRadius: 8,
-    marginTop: 7,
+    marginTop: "7%",
     elevation: 5,
     shadowColor: "#000",
     shadowOpacity: 0.3,
@@ -140,4 +143,3 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
-

@@ -28,7 +28,7 @@ export default BulletPoint = () => {
             <View key={i} style={styles.card}>
               <Text>{player.name}</Text>
             </View>
-          )
+          );
         })}
       </View>
       <View style={styles.buttonContainer}>
@@ -37,7 +37,7 @@ export default BulletPoint = () => {
         </TouchableOpacity>
       </View>
     </ScrollView>
-  )
+  );
 };
 
 const styles = StyleSheet.create({
@@ -71,6 +71,11 @@ const styles = StyleSheet.create({
     marginBottom: "5%",
     width: "90%",
   },
+  buttonContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: "10%",
+  },
   button: {
     backgroundColor: "#efefef",
     paddingVertical: "5%",
@@ -89,4 +94,3 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 });
-

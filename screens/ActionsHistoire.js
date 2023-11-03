@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateStorySuite, updateAction } from "../reducers/game";
+import {
+  updateStorySuite,
+  updateAction,
+  updateChoices,
+} from "../reducers/game";
 import { useFetchGpt } from "../hooks/useFetchGpt";
 import {
   Button,
@@ -16,31 +20,42 @@ import Spinner from "../components/Spinner";
 export default function ActionsHistoire({ navigation }) {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const [choices, setChoices] = useState(new Array(3).fill("En attente..."));
+  // const [choices, setChoices] = useState(new Array(3).fill("En attente..."));
   const context = useSelector((state) => state.game.context);
   const action = useSelector((state) => state.game.story?.action);
   const player = useSelector((state) => state.game.context.player);
   const story = useSelector((state) => state.game.story);
-
+  const choices = useSelector(
+    (state) => state.game.story[state.game.story.length - 1].choices
+  );
+  let generatedChoices = [];
   const generateChoices = async () => {
-    const updatedChoices = [...choices];
+    // const updatedChoices = [...choices];
 
     for (let i = 0; i < 3; i++) {
       try {
         const response = await useFetchGpt(
           `Tu génères un choix d'action pour le joueur ${player} en fonction de ${context} et de la précédente histoire.`,
-          20,
+          500,
           `Tu es mon assistant game-master qui connaît sur le bout des doigts l'univers de donjon et dragon. Voici le contexte de l'histoire en cours : ${context} et la précédente histoire : ${story}`
         );
-        updatedChoices[i] = response.gptResponse;
-        console.log("Réponse de GPT pour le choix", i, ":", response.gptResponse);
+        generatedChoices.push(response.gptResponse);
+        // updatedChoices[i] = response.gptResponse;
+        console.log(
+          "Réponse de GPT pour le choix",
+          i,
+          ":",
+          response.gptResponse
+        );
       } catch (error) {
         console.error("Une erreur s'est produite :", error);
-        updatedChoices[i] = "Erreur lors de la génération du choix";
+        // updatedChoices[i] = "Erreur lors de la génération du choix";
       }
     }
+    dispatch(updateChoices(generatedChoices));
 
-    setChoices(updatedChoices);
+    generatedChoices = [];
+    // setChoices(updatedChoices);
   };
 
   useEffect(() => {
@@ -68,26 +83,34 @@ export default function ActionsHistoire({ navigation }) {
       );
 
       dispatch(updateStorySuite(response.gptResponse));
-      console.log("Réponse de GPT pour la suite de l'histoire :", response.gptResponse);
+      console.log(
+        "Réponse de GPT pour la suite de l'histoire :",
+        response.gptResponse
+      );
     } catch (error) {
       console.error("Une erreur s'est produite :", error);
     }
   };
 
-
-
   return loading ? (
     <Spinner />
   ) : (
-    <View style={styles.container}>
-      <Text style={styles.intro}>Quelle action choisit le joueur 1?</Text>
+    <ScrollView style={styles.container}>
+      <Logo />
+      <Text style={styles.intro}>Quelle action choisit le joueur?</Text>
 
-      <View style={styles.buttonContainer}>
+      <View style={styles.cardContainer}>
         <Text>
           {choices.map((choice, index) => (
-            <ScrollView key={index} style={styles.card} contentContainerStyle={styles.scrollViewContent}>
+            <ScrollView
+              key={index}
+              style={styles.card}
+              contentContainerStyle={styles.scrollViewContent}
+            >
               <TouchableOpacity onPress={() => saveChoice(index)}>
-                <Text style={styles.buttonText}>{`Choix ${index + 1}: ${choice}`}</Text>
+                <Text style={styles.buttonText}>{`Choix ${
+                  index + 1
+                }: ${choice}`}</Text>
               </TouchableOpacity>
             </ScrollView>
           ))}
@@ -100,10 +123,9 @@ export default function ActionsHistoire({ navigation }) {
           <Text style={styles.buttonText}>Générer la suite de l'histoire</Text>
         </TouchableOpacity>
       </View>
-    </View>
-  )
-};
-
+    </ScrollView>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -126,16 +148,17 @@ const styles = StyleSheet.create({
   cardContainer: {
     width: "100%",
     alignItems: "center",
+    flexDirection: "column",
   },
+
   card: {
     fontFamily: "LeagueSpartan_500Medium",
     fontSize: 20,
     backgroundColor: "#efefef",
-    padding: "5%",
+    padding: 20,
     borderRadius: 8,
-    marginBottom: "8%",
-    maxWidth: "80%",
-    maxHeight: "40%",
+    marginBottom: 20,
+    width: "90%",
   },
   buttonContainer: {
     justifyContent: "center",
@@ -159,9 +182,3 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
-
-
-
-
-
-

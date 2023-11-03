@@ -22,13 +22,16 @@ const CreationJoueurs = ({ navigation }) => {
 
   const handleChange = (index, value) => {
     const updatedPlayers = [...players];
-    updatedPlayers[index] = { name: value, character: '' };
+    updatedPlayers[index] = { name: value, character: "" };
     setPlayers(updatedPlayers);
   };
 
   const addNewPlayer = () => {
     if (players.length < 5) {
-      setPlayers([...players, { name: `Joueur ${players.length + 1}`, character: "" }]);
+      setPlayers([
+        ...players,
+        { name: `Joueur ${players.length + 1}`, character: "" },
+      ]);
     } else {
       alert("Le nombre maximum de joueurs est atteint (5 joueurs).");
     }
@@ -44,12 +47,8 @@ const CreationJoueurs = ({ navigation }) => {
     }
   };
 
-
-
-
   const handleGoButton = async () => {
     try {
-
       dispatch(updatePlayers(players));
       navigation.navigate("ChoixDuree");
     } catch (error) {
@@ -86,7 +85,10 @@ const CreationJoueurs = ({ navigation }) => {
         <TouchableOpacity onPress={addNewPlayer} style={styles.addButton}>
           <Text style={styles.addButtonText}>Ajouter un joueur</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => handleGoButton()}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => handleGoButton()}
+        >
           <Text style={styles.buttonText}>GO!</Text>
         </TouchableOpacity>
       </View>

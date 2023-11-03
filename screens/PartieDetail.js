@@ -20,12 +20,12 @@ const PartieDetail = () => {
   const context = useSelector((state) => state.game.context);
   const store = useSelector((state) => state.game);
   const player = useSelector((state) => state.game.context.players[0]);
-  console.log("store ------------------", store)
+  console.log("store ------------------", store);
   const goToActionsHistoire = async () => {
     try {
       const response = await useFetchGpt(
         `Tu crées 3 actions pour chaque personnage de cette ${story}. Je veux que tu génères les actions uniquement pour ce personnage : ${player.name}, je veux que tu me les sortes sous forme de liste, sans commentaire.`,
-        200,
+        1000,
         `Tu es mon assistant game-master qui connaît sur le bout des doigts l'univers de donjon et dragon, voici le contexte de l'histoire en cours : ${context}`
       );
 
@@ -40,14 +40,11 @@ const PartieDetail = () => {
 
   return (
     <ScrollView style={styles.container}>
-
       <Logo />
       <Text style={styles.intro}>Voici le début de votre histoire</Text>
       <View style={styles.cardContainer}>
         <View style={styles.card}>
-          <Text style={styles.text}>
-            {story}
-          </Text>
+          <Text style={styles.text}>{story}</Text>
         </View>
       </View>
       <View style={styles.buttonContainer}>
@@ -117,6 +114,3 @@ const styles = StyleSheet.create({
 });
 
 export default PartieDetail;
-
-
-

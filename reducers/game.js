@@ -7,10 +7,8 @@ const initialState = {
     players: [],
     onboardingData: [],
   },
-  story: []
-}
-  ;
-
+  story: [],
+};
 const gameSlice = createSlice({
   name: "game",
   initialState,
@@ -32,22 +30,25 @@ const gameSlice = createSlice({
         state.story.push({
           turn: 0,
           player: { name: state.context.players[0].name, character: "" },
-          story: action.payload,
-          choices: [],
+          story: "",
+          choices: action.payload,
           action: "",
-        })
-      }
-      else {
+        });
+      } else {
         state.story.push({
           turn: state.story.length - 1,
           player: {
-            name: state.context.players[state.context.players.indexOf(state.story[state.story.length - 1].player) + 1].name
-            , character: ""
+            name: state.context.players[
+              state.context.players.indexOf(
+                state.story[state.story.length - 1].player
+              ) + 1
+            ].name,
+            character: "",
           },
           story: "",
           choices: action.payload,
           action: "",
-        })
+        });
       }
     },
 
@@ -74,8 +75,7 @@ const gameSlice = createSlice({
     selectedStory: (state, action) => {
       initialState.context = action.payload.context;
       initialState.story = action.payload.story;
-    }
-
+    },
   },
 });
 
@@ -88,7 +88,7 @@ export const {
   addStory,
   updateChoices,
   updateStorySuite,
-  selectedStory
+  selectedStory,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

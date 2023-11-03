@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,27 +6,32 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import Logo from '../components/Logo';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateAction } from '../reducers/game';
-import { useFetchGpt } from '../hooks/useFetchGpt';
+import Logo from "../components/Logo";
+import { useDispatch, useSelector } from "react-redux";
+import { updateAction } from "../reducers/game";
+import { useFetchGpt } from "../hooks/useFetchGpt";
 
 export default function Histoire({ navigation }) {
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const context = useSelector((state) => state.game.context);
-  const player = useSelector((state) => state.game.story[state.game.story.length - 1].player);
-  const previousStory = useSelector((state) => state.game.story[state.game.story.length - 1].story);
+  const player = useSelector(
+    (state) => state.game.story[state.game.story.length - 1].player
+  );
+  const previousStory = useSelector(
+    (state) => state.game.story[state.game.story.length - 1].story
+  );
 
   useEffect(() => {
-    console.log("store--------------------", previousStory)
-  }, [])
+    console.log("store--------------------", previousStory);
+  }, []);
 
   const story = useSelector((state) => {
     const stories = state.game.story && state.game.story.story;
     const currentTurn = state.game.story && state.game.story.turn;
 
     if (stories && stories.length > 0 && currentTurn) {
-      const lastTurnStory = stories.find(story => story.turn === currentTurn);
+      const lastTurnStory = stories.find((story) => story.turn === currentTurn);
 
       if (lastTurnStory) {
         return lastTurnStory.text;
@@ -56,7 +61,7 @@ export default function Histoire({ navigation }) {
     }
   };
 
-  const selectedStory = useSelector((state) => state.game)
+  const selectedStory = useSelector((state) => state.game);
 
   console.log(selectedStory);
 
@@ -98,10 +103,7 @@ export default function Histoire({ navigation }) {
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => Suivant()}
-        >
+        <TouchableOpacity style={styles.button} onPress={() => Suivant()}>
           <Text style={styles.buttonText}>Suite</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => saveGame()}>
