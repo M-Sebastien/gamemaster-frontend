@@ -11,7 +11,6 @@ import {
   View
 } from "react-native";
 import Logo from "../components/Logo";
-import Footer from "../components/Footer";
 
 export default function Connexion({ navigation }) {
   const dispatch = useDispatch();
@@ -20,7 +19,7 @@ export default function Connexion({ navigation }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
 
-  const handleConnection = () => {
+  const handleLogin = () => {
     // if (!username === "" && !password === "") {
     fetch("https://gamemaster-backend.vercel.app/users/signin", {
       method: 'POST',
@@ -120,7 +119,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: "15%",
     borderRadius: 8,
     marginTop: "7%",
-    elevation: "5%",
+    // elevation: "5%",
     shadowColor: "#000",
     shadowOpacity: "3%",
     shadowOffset: { width: 0, height: 2 },

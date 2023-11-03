@@ -52,6 +52,12 @@ const gameSlice = createSlice({
     saveOnboardingData: (state, action) => {
       state.story[0].choices.push(action.payload);
     },
+
+    selectedStory: (state, action) => {
+      initialState.context = action.payload.context;
+      initialState.story = action.payload.story;
+    }
+
   },
 });
 
@@ -62,5 +68,6 @@ export const {
   addAction,
   saveOnboardingData,
   updatePlayers,
+  selectedStory
 } = gameSlice.actions;
 export default gameSlice.reducer;

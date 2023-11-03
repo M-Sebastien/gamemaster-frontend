@@ -20,7 +20,6 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import game from "./reducers/game";
 import user from './reducers/user';
-import ActionsGpt from "./Gpt-components/ActionsGpt";
 
 import {
   useFonts,

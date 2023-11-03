@@ -1,12 +1,15 @@
 import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Logo from "../components/Logo";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateStory } from "../reducers/game";
 import StoriesGpt from "../Gpt-components/StoriesGpt";
 
 export default function Histoire({ navigation }) {
   const dispatch = useDispatch()
 
+  const selectedStory = useSelector((state) => state.game)
+
+  console.log(selectedStory);
 
   const Suivant = () => {
 
