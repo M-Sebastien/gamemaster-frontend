@@ -15,7 +15,7 @@ import Spinner from "../components/Spinner";
 
 export default function ActionsHistoire({ navigation }) {
   const dispatch = useDispatch();
-  const [loading, setLoading]  = useState(false);
+  const [loading, setLoading] = useState(false);
   const [choices, setChoices] = useState(new Array(3).fill("En attente..."));
   const context = useSelector((state) => state.game.context);
   const action = useSelector((state) => state.game.story?.action);
@@ -36,7 +36,6 @@ export default function ActionsHistoire({ navigation }) {
         console.log("Réponse de GPT pour le choix", i, ":", response.gptResponse);
       } catch (error) {
         console.error("Une erreur s'est produite :", error);
-        // Gérer l'erreur si nécessaire
         updatedChoices[i] = "Erreur lors de la génération du choix";
       }
     }
@@ -55,7 +54,6 @@ export default function ActionsHistoire({ navigation }) {
       console.log("Choix sauvegardé :", selectedChoice);
     } catch (error) {
       console.error("Erreur lors de la sauvegarde du choix :", error);
-      // Gérer l'erreur si nécessaire
     }
   };
 
@@ -73,39 +71,39 @@ export default function ActionsHistoire({ navigation }) {
       console.log("Réponse de GPT pour la suite de l'histoire :", response.gptResponse);
     } catch (error) {
       console.error("Une erreur s'est produite :", error);
-      // Gérer l'erreur si nécessaire
-    }};
+    }
+  };
 
 
 
-    return loading ? (
-        <Spinner />
-      ) : (
-        <View style={styles.container}>
-          <Text style={styles.intro}>Quelle action choisit le joueur 1?</Text>
-    
-          <View style={styles.buttonContainer}>
-              <Text>
-                {choices.map((choice, index) => (
-                  <ScrollView key={index} style={styles.card} contentContainerStyle={styles.scrollViewContent}>
-                    <TouchableOpacity onPress={() => saveChoice(index)}>
-                      <Text style={styles.buttonText}>{`Choix ${index + 1}: ${choice}`}</Text>
-                    </TouchableOpacity>
-                  </ScrollView>
-                ))}
-              </Text>
-    
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => navigation.navigate("Histoire")}
-            >
-              <Text style={styles.buttonText}>Générer la suite de l'histoire</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      )
-    };
-    
+  return loading ? (
+    <Spinner />
+  ) : (
+    <View style={styles.container}>
+      <Text style={styles.intro}>Quelle action choisit le joueur 1?</Text>
+
+      <View style={styles.buttonContainer}>
+        <Text>
+          {choices.map((choice, index) => (
+            <ScrollView key={index} style={styles.card} contentContainerStyle={styles.scrollViewContent}>
+              <TouchableOpacity onPress={() => saveChoice(index)}>
+                <Text style={styles.buttonText}>{`Choix ${index + 1}: ${choice}`}</Text>
+              </TouchableOpacity>
+            </ScrollView>
+          ))}
+        </Text>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("Histoire")}
+        >
+          <Text style={styles.buttonText}>Générer la suite de l'histoire</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  )
+};
+
 
 const styles = StyleSheet.create({
   container: {

@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import {
   View,
@@ -15,23 +14,25 @@ import { useFetchGpt } from '../hooks/useFetchGpt';
 export default function Histoire({ navigation }) {
   const dispatch = useDispatch();
   const context = useSelector((state) => state.game.context);
-  const player = useSelector((state) => state.game.story[state.game.story.length -1].player);
-  const previousStory = useSelector((state) => state.game.story[state.game.story.length -1].story);
-   useEffect(() => {
+  const player = useSelector((state) => state.game.story[state.game.story.length - 1].player);
+  const previousStory = useSelector((state) => state.game.story[state.game.story.length - 1].story);
+
+  useEffect(() => {
     console.log("store--------------------", previousStory)
-   },[])
+  }, [])
+
   const story = useSelector((state) => {
-    const stories = state.game.story && state.game.story.story; // Vérifiez que state.game.story est défini
+    const stories = state.game.story && state.game.story.story;
     const currentTurn = state.game.story && state.game.story.turn;
-  
+
     if (stories && stories.length > 0 && currentTurn) {
       const lastTurnStory = stories.find(story => story.turn === currentTurn);
-  
+
       if (lastTurnStory) {
         return lastTurnStory.text;
       }
     }
-  
+
     return null;
   });
 
@@ -39,7 +40,6 @@ export default function Histoire({ navigation }) {
     try {
       navigation.navigate("ActionsHistoire");
 
-      // Supposons que useFetchGpt effectue un appel asynchrone à une API pour obtenir des données
       const response = await useFetchGpt(
         `Tu crées 3 actions pour chaque personnage de cette ${story}. Je veux que tu génères les actions uniquement pour ce personnage : ${player}, en une phrase, sans commentaire et sans details`,
         500,
@@ -47,7 +47,7 @@ export default function Histoire({ navigation }) {
       );
 
       const newStory = response.gptResponse;
-      const currentTurn = 1; // Remplacez 1 par le numéro de tour actuel récupéré depuis votre state Redux
+      const currentTurn = 1;
 
       dispatch(updateAction({ text: newStory, turn: currentTurn }));
       navigation.navigate("ActionsHistoire");
@@ -56,14 +56,9 @@ export default function Histoire({ navigation }) {
     }
   };
 
-  useEffect(() => {
-    // Vous pouvez ajouter ici une logique pour charger l'histoire pour le tour actuel au chargement du composant, si nécessaire
-  }, []);
+  const selectedStory = useSelector((state) => state.game)
 
-  
-
-
-
+  console.log(selectedStory);
 
   function saveGame() {
     setLoading(true);
@@ -99,7 +94,7 @@ export default function Histoire({ navigation }) {
       <Text style={styles.intro}>Découvrez la suite de l'histoire</Text>
       <View style={styles.cardContainer}>
         <View style={styles.card}>
-          <Text>{previousStory}</Text> 
+          <Text>{previousStory}</Text>
         </View>
       </View>
       <View style={styles.buttonContainer}>
@@ -170,5 +165,3 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
-
-

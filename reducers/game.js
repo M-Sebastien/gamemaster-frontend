@@ -5,9 +5,10 @@ const initialState = {
     title: "",
     initialStory: "",
     players: [],
-    onboardingData: [], // Ajoutez un tableau pour sauvegarder les choix des utilisateurs
+    onboardingData: [],
   },
-  story: []}
+  story: []
+}
   ;
 
 const gameSlice = createSlice({
@@ -26,34 +27,36 @@ const gameSlice = createSlice({
       state.context.initialStory = action.payload;
     },
 
-    updateChoices:(state, action) => {
-      if (state.story.length === 0 ) {
-      state.story.push({
-        turn: 0,
-      player: { name: state.context.players[0].name, character: ""},
-      story: action.payload,
-      choices: [],
-      action: "",
-      })
+    updateChoices: (state, action) => {
+      if (state.story.length === 0) {
+        state.story.push({
+          turn: 0,
+          player: { name: state.context.players[0].name, character: "" },
+          story: action.payload,
+          choices: [],
+          action: "",
+        })
       }
       else {
         state.story.push({
-          turn: state.story.length -1,
-        player: { name: state.context.players[state.context.players.indexOf(state.story[state.story.length -1].player) + 1].name
-          , character: ""},
-        story: "",
-        choices: action.payload,
-        action: "",
+          turn: state.story.length - 1,
+          player: {
+            name: state.context.players[state.context.players.indexOf(state.story[state.story.length - 1].player) + 1].name
+            , character: ""
+          },
+          story: "",
+          choices: action.payload,
+          action: "",
         })
       }
     },
 
     updateStorySuite: (state, action) => {
-      state.story[state.story.length -1].story = action.payload; // Remplacez les choix existants par les nouveaux
+      state.story[state.story.length - 1].story = action.payload; // Remplacez les choix existants par les nouveaux
     },
 
     updateAction: (state, action) => {
-      state.story[state.story.length -1].action = action.payload; // Remplacez les actions existantes par les nouvelles
+      state.story[state.story.length - 1].action = action.payload; // Remplacez les actions existantes par les nouvelles
     },
 
     saveOnboardingData: (state, action) => {
@@ -67,6 +70,12 @@ const gameSlice = createSlice({
     selectedStory: (state, action) => {
       initialState = action.payload;
     },
+
+    selectedStory: (state, action) => {
+      initialState.context = action.payload.context;
+      initialState.story = action.payload.story;
+    }
+
   },
 });
 

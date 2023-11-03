@@ -5,9 +5,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Logo from "../components/Logo";
 
-
 const MesParties = () => {
-
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.value.token);
   const navigation = useNavigation();
@@ -31,8 +29,10 @@ const MesParties = () => {
     navigation.navigate("CreationJoueurs");
   };
 
-  const handleStorySelection = (selectedStory) => {
-    navigation.navigate("Histoire", { story: selectedStory });
+  const handleStorySelection = (title) => {
+    const story = storiesData.find(e => e.context.title === title)
+    dispatch(selectedStory(story));
+    navigation.navigate("Histoire");
   };
 
   const renderStoryButtons = () => {
@@ -40,12 +40,11 @@ const MesParties = () => {
       <TouchableOpacity
         key={index}
         style={styles.partieContainer}
-        onPress={() => handleStorySelection(story)}
+        onPress={() => handleStorySelection(story.context.title)}
       >
         <Text style={styles.buttonText}>{story.context.title}</Text>
       </TouchableOpacity>
     ));
-
   };
 
   return (
@@ -87,8 +86,10 @@ const styles = StyleSheet.create({
     textShadowRadius: 10,
   },
   partieContainer: {
+    textAlign: "center",
     backgroundColor: "#efefef",
-    padding: 10,
+    paddingVertical: "5%",
+    paddingHorizontal: "15%",
     borderRadius: 8,
     marginBottom: "9%",
     textShadowColor: "#efefef",
@@ -99,16 +100,21 @@ const styles = StyleSheet.create({
     fontFamily: "LeagueSpartan_700Bold",
     fontSize: 18,
     fontWeight: "bold",
-    textAlign: "center",
   },
   centerContainer: {
+    justifyContent: "center",
     alignItems: "center",
   },
   button: {
     backgroundColor: "#efefef",
-    padding: 10,
+    paddingVertical: "5%",
+    paddingHorizontal: "15%",
     borderRadius: 8,
-    marginTop: 20,
+    marginTop: "7%",
+    elevation: "5%",
+    shadowColor: "#000",
+    shadowOpacity: "3%",
+    shadowOffset: { width: 0, height: 2 },
   },
   buttonText: {
     fontFamily: "LeagueSpartan_700Bold",

@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: "15%",
     borderRadius: 8,
     marginTop: "7%",
-    elevation: "5%",
+    // elevation: "5%",
     shadowColor: "#000",
     shadowOpacity: "3%",
     shadowOffset: { width: 0, height: 2 },

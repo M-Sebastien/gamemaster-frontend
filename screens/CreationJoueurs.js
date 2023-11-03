@@ -45,16 +45,15 @@ const CreationJoueurs = ({ navigation }) => {
   };
 
 
- 
+
 
   const handleGoButton = async () => {
     try {
-      
+
       dispatch(updatePlayers(players));
       navigation.navigate("ChoixDuree");
     } catch (error) {
       console.error("Une erreur s'est produite :", error);
-      // Gérer l'erreur si nécessaire
     }
   };
 

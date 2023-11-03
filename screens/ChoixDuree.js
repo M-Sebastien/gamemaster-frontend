@@ -48,7 +48,6 @@ export default function ChoixDuree({ navigation }) {
       console.log(response);
     } catch (error) {
       console.error("Une erreur s'est produite :", error);
-      // Gérer l'erreur si nécessaire
     }
   };
 

@@ -10,7 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
 import Logo from "../components/Logo";
 import { updateChoices } from "../reducers/game";
-import { useFetchGpt } from "../hooks/useFetchGpt"; // Import de l'action updateAction
+import { useFetchGpt } from "../hooks/useFetchGpt";
 
 const PartieDetail = () => {
   const navigation = useNavigation();
@@ -20,7 +20,7 @@ const PartieDetail = () => {
   const context = useSelector((state) => state.game.context);
   const store = useSelector((state) => state.game);
   const player = useSelector((state) => state.game.context.players[0]);
-console.log("store ------------------", store)
+  console.log("store ------------------", store)
   const goToActionsHistoire = async () => {
     try {
       const response = await useFetchGpt(
@@ -28,7 +28,7 @@ console.log("store ------------------", store)
         200,
         `Tu es mon assistant game-master qui connaît sur le bout des doigts l'univers de donjon et dragon, voici le contexte de l'histoire en cours : ${context}`
       );
-      
+
       // Mettre à jour les actions enregistrées
       const actions = response.gptResponse.split(/[0-9]./).slice(1, -1); // Obtention des actions
       dispatch(updateChoices(actions)); // Mettre à jour l'action dans Redux
