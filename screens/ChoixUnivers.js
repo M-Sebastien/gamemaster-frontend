@@ -14,7 +14,7 @@ export default function ChoixUnivers() {
   const context = useSelector((state) => state.game.context);
   const players = useSelector((state) => state.game.context.players);
   const onboardingData = useSelector((state) => state.game.context.onboardingData);
-
+ 
   const [univers, setUnivers] = useState(null);
 
   const handleUniversSelection = (univers) => {
