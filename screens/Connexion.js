@@ -20,7 +20,7 @@ export default function Connexion({ navigation }) {
 
   const handleLogin = () => {
     // if (!username === "" && !password === "") {
-    fetch("https://gamemaster-backend.vercel.app/users/signin", {
+    fetch("http://192.168.1.59:3000/users/signin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username: username, password: password }),
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: "15%",
     borderRadius: 8,
     marginTop: "7%",
-    // elevation: "5%",
+    // //elevation: "5%",
     shadowColor: "#000",
     shadowOpacity: "3%",
     shadowOffset: { width: 0, height: 2 },

@@ -11,14 +11,12 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import Logo from "../components/Logo";
 import { useDispatch } from "react-redux";
 import { updatePlayers } from "../reducers/game";
+import { useFetchGpt } from "../hooks/useFetchGpt";
 
 const CreationJoueurs = ({ navigation }) => {
   const dispatch = useDispatch();
 
-  const [players, setPlayers] = useState([
-    { name: "", character: "" },
-    { name: "", character: "" },
-  ]);
+  const [players, setPlayers] = useState([{ name: "", character: "" }, { name: "", character: "" }]);
 
   const handleChange = (index, value) => {
     const updatedPlayers = [...players];
@@ -48,10 +46,23 @@ const CreationJoueurs = ({ navigation }) => {
   };
 
   const handleGoButton = async () => {
-    try {
+    const response = await useFetchGpt(
+      `Dans l'univers donjon et dragon, attribue à ${players.length} joueurs un personnage de l'univers résumé en une phrase`,
+      200,
+      "Tu es mon assistant game-master qui connaît sur le bout des doigts l'univers de donjon et dragon"
+    );
+
+    if(response.result) {
+      const characters = response.gptResponse.split('.');
+      const allPlayers = players;
+
+      for (let i = 0; i < allPlayers.length; i++) {
+        allPlayers[i].character = characters[i];
+      }
+
       dispatch(updatePlayers(players));
       navigation.navigate("ChoixDuree");
-    } catch (error) {
+    } else {
       console.error("Une erreur s'est produite :", error);
     }
   };
@@ -140,7 +151,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: "15%",
     borderRadius: 8,
     marginTop: "7%",
-    elevation: "5%",
+    //elevation: "5%",
     shadowColor: "#000",
     shadowOpacity: "3%",
     shadowOffset: { width: 0, height: 2 },
@@ -161,7 +172,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: "15%",
     borderRadius: 8,
     marginTop: "7%",
-    elevation: "5%",
+    //elevation: "5%",
     shadowColor: "#000",
     shadowOpacity: "3%",
     shadowOffset: { width: 0, height: 2 },

@@ -13,10 +13,9 @@ export default function ChoixDuree({ navigation }) {
 
   const handleDureeSelection = (duree) => {
     setDuree(duree);
-    console.log("Durée sélectionnée :", duree);
   };
 
-  const generatePlayersPrompt = () => {
+  /*const generatePlayersPrompt = () => {
     const playerDetails = players
       .map(
         (player) =>
@@ -25,33 +24,21 @@ export default function ChoixDuree({ navigation }) {
       .join(", ");
     return playerDetails;
   };
+  */
 
   const Suivant = async () => {
     if (!duree) {
       console.error("Veuillez sélectionner une durée pour la partie !");
       return;
     }
-
-    try {
-      console.log("Joueurs sélectionnés :", players);
-      navigation.navigate("ChoixPartie");
-
-      const playerDetails = generatePlayersPrompt();
-
-      const response = await useFetchGpt(
-        `Connecte ces joueurs avec = ${playerDetails}, les personnages sont aléatoires, mais une seule phrase de description par personnage. Après la création des personnages, arrête-toi.`,
-        200,
-        "Tu es mon assistant game-master qui connaît sur le bout des doigts l'univers de donjon et dragon"
-      );
-
-      dispatch(saveOnboardingData(duree));
-      console.log("Données sauvegardées :", duree);
-
-      dispatch(addCharacters(response));
-      console.log(response);
-    } catch (error) {
-      console.error("Une erreur s'est produite :", error);
-    }
+    /*const playerDetails = generatePlayersPrompt();
+    const response = await useFetchGpt(
+      `Connecte ces joueurs avec = ${playerDetails}, les personnages sont aléatoires, mais une seule phrase de description par personnage. Après la création des personnages, arrête-toi.`,
+      200,
+      "Tu es mon assistant game-master qui connaît sur le bout des doigts l'univers de donjon et dragon"
+    );*/
+    dispatch(saveOnboardingData(duree));
+    navigation.navigate("ChoixPartie");
   };
 
   return (
@@ -132,7 +119,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: "15%",
     borderRadius: 8,
     marginTop: "7%",
-    elevation: 5,
+    //elevation: 5,
     shadowColor: "#000",
     shadowOpacity: 0.3,
     shadowOffset: { width: 0, height: 2 },

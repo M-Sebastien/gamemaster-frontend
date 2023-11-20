@@ -29,7 +29,7 @@ const gameSlice = createSlice({
       if (state.story.length === 0) {
         state.story.push({
           turn: 0,
-          player: { name: state.context.players[0].name, character: "" },
+          player: { name: state.context.players[0].name, character: state.context.players[0].character },
           story: "",
           choices: action.payload,
           action: "",
@@ -43,7 +43,11 @@ const gameSlice = createSlice({
                 state.story[state.story.length - 1].player
               ) + 1
             ].name,
-            character: "",
+            character: state.context.players[
+              state.context.players.indexOf(
+                state.story[state.story.length - 1].player
+              ) + 1
+            ].character,
           },
           story: "",
           choices: action.payload,

@@ -14,7 +14,6 @@ export default function ChoixUnivers() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const context = useSelector((state) => state.game.context);
-  const players = useSelector((state) => state.game.context.players);
   const onboardingData = useSelector(
     (state) => state.game.context.onboardingData
   );
@@ -27,31 +26,25 @@ export default function ChoixUnivers() {
   };
 
   const Suivant = async () => {
-    try {
-      if (!univers) {
-        console.error("Veuillez sélectionner un univers !");
-        return;
-      }
+    if (!univers) {
+      console.error("Veuillez sélectionner un univers !");
+      return;
+    }
 
-      console.log("Navigation vers BulletPoint...");
-      navigation.navigate("BulletPoint");
+    const response = await useFetchGpt(
+      `Créer une histoire dans l'univers ${univers}. Il y a ${context.players.length} joueurs. La description des personnages est ${context.players}. 
+      Contexte : ${onboardingData}. Soyez inventif !`,
+      1000,
+      `Tu es mon assistant game-master qui connaît sur le bout des doigts l'univers de donjon et dragon. 
+      Voici le contexte de l'histoire en cours : ${context}`
+    );
 
-      const response = await useFetchGpt(
-        `Créer une histoire dans l'univers ${univers}. Il y a ${players.length} joueurs. 
-        Contexte : ${onboardingData}. Soyez inventif !`,
-        1000,
-        `Tu es mon assistant game-master qui connaît sur le bout des doigts l'univers de donjon et dragon. 
-        Voici le contexte de l'histoire en cours : ${context}`
-      );
-
+    if (response.result) {
       dispatch(saveOnboardingData(univers));
-      console.log("Données sauvegardées :", univers);
-
       dispatch(updateStory(response.gptResponse));
       // dispatch(updateStorySuite(response.gptResponse))
       console.log("Histoire générée :", response.gptResponse);
-    } catch (error) {
-      console.error("Une erreur s'est produite :", error);
+      navigation.navigate("BulletPoint");
     }
   };
 
@@ -138,7 +131,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: "15%",
     borderRadius: 8,
     marginTop: "7%",
-    elevation: 5,
+    //elevation: 5,
     shadowColor: "#000",
     shadowOpacity: 0.3,
     shadowOffset: { width: 0, height: 2 },
