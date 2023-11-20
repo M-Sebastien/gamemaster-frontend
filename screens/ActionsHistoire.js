@@ -23,12 +23,42 @@ export default function ActionsHistoire({ navigation }) {
   // const [choices, setChoices] = useState(new Array(3).fill("En attente..."));
   const context = useSelector((state) => state.game.context);
   const action = useSelector((state) => state.game.story?.action);
-  const player = useSelector((state) => state.game.context.player);
+  const player = useSelector((state) => state.game.context.players);
   const story = useSelector((state) => state.game.story);
   const choices = useSelector(
     (state) => state.game.story[state.game.story.length - 1].choices
   );
   let generatedChoices = [];
+
+  const [selected, setSelected] = useState();
+
+  const saveChoice = (choixIndex) => {
+    setSelected(choixIndex);
+    const selectedChoice = choices[choixIndex];
+    dispatch(updateAction(selectedChoice));
+    console.log("Choix sauvegardé :", selectedChoice);
+  };
+
+  const Suivant = async () => {
+    const response = await useFetchGpt(
+      `Tu génères la suite de l'histoire en fonction de ${context} et du choix : ${action}.`,
+      1000,
+      `Tu es mon assistant game-master qui connaît sur le bout des doigts l'univers de donjon et dragon. Voici le contexte de l'histoire en cours : ${context}`
+    );
+
+    if(response.result) {
+      setSelected();
+      navigation.navigate("Histoire");
+      dispatch(updateStorySuite(response.gptResponse));
+      console.log(
+        "Réponse de GPT pour la suite de l'histoire :",
+        response.gptResponse
+      );
+    } else {
+      console.error("Une erreur s'est produite :", error);
+    }
+  };
+  /*
   const generateChoices = async () => {
     // const updatedChoices = [...choices];
 
@@ -57,73 +87,35 @@ export default function ActionsHistoire({ navigation }) {
     generatedChoices = [];
     // setChoices(updatedChoices);
   };
-
-  useEffect(() => {
-    generateChoices();
-  }, [story]); // Exécuté lorsque la "story" change dans le store
-
-  const saveChoice = (choixIndex) => {
-    try {
-      const selectedChoice = choices[choixIndex];
-      dispatch(updateAction(selectedChoice));
-      console.log("Choix sauvegardé :", selectedChoice);
-    } catch (error) {
-      console.error("Erreur lors de la sauvegarde du choix :", error);
-    }
-  };
-
-  const Suivant = async () => {
-    try {
-      navigation.navigate("Histoire");
-
-      const response = await useFetchGpt(
-        `Tu génères la suite de l'histoire en fonction de ${context} et du choix : ${action}.`,
-        200,
-        `Tu es mon assistant game-master qui connaît sur le bout des doigts l'univers de donjon et dragon. Voici le contexte de l'histoire en cours : ${context}`
-      );
-
-      dispatch(updateStorySuite(response.gptResponse));
-      console.log(
-        "Réponse de GPT pour la suite de l'histoire :",
-        response.gptResponse
-      );
-    } catch (error) {
-      console.error("Une erreur s'est produite :", error);
-    }
-  };
-
+ */
   return loading ? (
     <Spinner />
   ) : (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <Logo />
       <Text style={styles.intro}>Quelle action choisit le joueur?</Text>
-
-      <View style={styles.cardContainer}>
-        <Text>
-          {choices.map((choice, index) => (
-            <ScrollView
-              key={index}
-              style={styles.card}
-              contentContainerStyle={styles.scrollViewContent}
-            >
-              <TouchableOpacity onPress={() => saveChoice(index)}>
+      <ScrollView
+        style={styles.content}
+      >
+        <View style={styles.cardContainer}>
+          {choices.map((choice, index) => {
+            return (
+              <TouchableOpacity key={index} onPress={() => saveChoice(index)} style={[styles.card, {opacity: selected === index ? 0.5 : 1}]}>
                 <Text style={styles.buttonText}>{`Choix ${
                   index + 1
                 }: ${choice}`}</Text>
               </TouchableOpacity>
-            </ScrollView>
-          ))}
-        </Text>
-
-        <TouchableOpacity
+            )
+          })}
+          <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate("Histoire")}
-        >
-          <Text style={styles.buttonText}>Générer la suite de l'histoire</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+          onPress={() => Suivant()}
+          >
+            <Text style={styles.buttonText}>Générer la suite de l'histoire</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -149,8 +141,11 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     flexDirection: "column",
+    justifyContent: "center",
   },
-
+  content: {
+    width: "100%",
+  },
   card: {
     fontFamily: "LeagueSpartan_500Medium",
     fontSize: 20,
@@ -171,10 +166,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: "15%",
     borderRadius: 8,
     marginTop: "7%",
-    elevation: "5%",
+    //elevation: "5%",
     shadowColor: "#000",
     shadowOpacity: "3%",
     shadowOffset: { width: 0, height: 2 },
+    width: "90%",
   },
   buttonText: {
     fontFamily: "LeagueSpartan_700Bold",

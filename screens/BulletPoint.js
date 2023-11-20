@@ -25,9 +25,12 @@ export default BulletPoint = () => {
       <View style={styles.cardContainer}>
         {players.map((player, i) => {
           return (
-            <View key={i} style={styles.card}>
-              <Text>{player.name}</Text>
-            </View>
+            <View key={i} style={styles.cardPlayer}>
+              <Text style={{fontSize: 20}}>{player.name}</Text>
+              <View style={styles.card}>
+                <Text>{player.character}</Text>
+              </View>
+          </View>
           );
         })}
       </View>
@@ -62,14 +65,18 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
   },
-  card: {
+  cardPlayer: {
+    width: "90%",
     fontFamily: "LeagueSpartan_500Medium",
-    fontSize: 20,
+    color: "black",
+  },
+  card: {
     backgroundColor: "#efefef",
     padding: "5%",
     borderRadius: 8,
     marginBottom: "5%",
-    width: "90%",
+    marginTop: "5%",
+    width: "100%",
   },
   buttonContainer: {
     justifyContent: "center",
@@ -82,7 +89,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: "15%",
     borderRadius: 8,
     marginTop: "7%",
-    elevation: 5,
+    //elevation: 5,
     shadowColor: "#000",
     shadowOpacity: 0.3,
     shadowOffset: { width: 0, height: 2 },

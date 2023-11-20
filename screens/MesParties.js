@@ -14,7 +14,7 @@ const MesParties = () => {
 
   useEffect(() => {
     fetch(
-      `https://gamemaster-backend.vercel.app/stories/getStoriesByToken/${token}`
+      `http://192.168.1.59:3000/stories/getStoriesByToken/${token}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: "15%",
     borderRadius: 8,
     marginTop: "7%",
-    elevation: "5%",
+    //elevation: "5%",
     shadowColor: "#000",
     shadowOpacity: "3%",
     shadowOffset: { width: 0, height: 2 },

@@ -20,7 +20,6 @@ export default function ChoixStyle({ navigation }) {
     }
 
     dispatch(saveOnboardingData(style));
-    console.log("Données sauvegardées :", style);
     navigation.navigate("ChoixUnivers");
   };
 
@@ -106,7 +105,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: "15%",
     borderRadius: 8,
     marginTop: "7%",
-    elevation: 5,
+    //elevation: 5,
     shadowColor: "#000",
     shadowOpacity: 0.3,
     shadowOffset: { width: 0, height: 2 },

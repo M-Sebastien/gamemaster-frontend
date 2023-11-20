@@ -18,24 +18,22 @@ const PartieDetail = () => {
 
   const story = useSelector((state) => state.game.context.initialStory);
   const context = useSelector((state) => state.game.context);
-  const store = useSelector((state) => state.game);
   const player = useSelector((state) => state.game.context.players[0]);
-  console.log("store ------------------", store);
+
   const goToActionsHistoire = async () => {
-    try {
       const response = await useFetchGpt(
-        `Tu crées 3 actions pour chaque personnage de cette ${story}. Je veux que tu génères les actions uniquement pour ce personnage : ${player.name}, je veux que tu me les sortes sous forme de liste, sans commentaire.`,
+        `Tu crées 3 actions pour ce personnage ${player.character} de cette ${story}. Je veux que tu me renvois les actions soit sous forme de liste numérique, sans commentaire.`,
         1000,
         `Tu es mon assistant game-master qui connaît sur le bout des doigts l'univers de donjon et dragon, voici le contexte de l'histoire en cours : ${context}`
       );
-
-      // Mettre à jour les actions enregistrées
-      const actions = response.gptResponse.split(/[0-9]./).slice(1, -1); // Obtention des actions
-      dispatch(updateChoices(actions)); // Mettre à jour l'action dans Redux
-      navigation.navigate("ActionsHistoire");
-    } catch (error) {
-      console.error("Une erreur s'est produite :", error);
-    }
+      
+      if(response.result) {
+        const actions = response.gptResponse.split('.').filter(element => isNaN(element));
+        dispatch(updateChoices(actions)); // Mettre à jour l'action dans Redux
+        navigation.navigate("ActionsHistoire");
+      } else {
+        console.error("Une erreur s'est produite :", error);
+      }
   };
 
   return (
@@ -99,7 +97,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#efefef",
     padding: 15,
     borderRadius: 8,
-    elevation: 5,
+    //elevation: 5,
   },
   buttonText: {
     fontFamily: "LeagueSpartan_700Bold",

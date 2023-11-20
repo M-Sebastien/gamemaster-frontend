@@ -18,22 +18,24 @@ export default function Histoire({ navigation }) {
   const player = useSelector(
     (state) => state.game.story[state.game.story.length - 1].player
   );
-  const previousStory = useSelector(
+  const previousTurn = useSelector(
     (state) => state.game.story[state.game.story.length - 1].story
   );
+  const previousStory = useSelector(
+    (state) => state.game.story[state.game.story.length - 1].turn
+  );
 
-  useEffect(() => {
-    console.log("store--------------------", previousStory);
-  }, []);
-
+  console.log('story', useSelector(
+    (state) => state.game.story[state.game.story.length - 1]
+  ));
   const story = useSelector((state) => {
     const stories = state.game.story && state.game.story.story;
     const currentTurn = state.game.story && state.game.story.turn;
 
     if (stories && stories.length > 0 && currentTurn) {
-      const lastTurnStory = stories.find((story) => story.turn === currentTurn);
+      const lastTurnStory = stories.filter((story) => story.turn === currentTurn);
 
-      if (lastTurnStory) {
+      if (lastTurnStory.length > 0) {
         return lastTurnStory.text;
       }
     }
@@ -42,32 +44,25 @@ export default function Histoire({ navigation }) {
   });
 
   const Suivant = async () => {
-    try {
-      navigation.navigate("ActionsHistoire");
+    const response = await useFetchGpt(
+      `Tu crées 3 actions pour ce personnage ${player.character} de cette ${story}. Je veux que tu me renvois les actions soit sous forme de liste numérique, sans commentaire.`,
+      1000,
+      `Tu es mon assistant game-master qui connaît sur le bout des doigts l'univers de donjon et dragon, voici le contexte de l'histoire en cours : ${context}`
+    );
 
-      const response = await useFetchGpt(
-        `Tu crées 3 actions pour chaque personnage de cette ${story}. Je veux que tu génères les actions uniquement pour ce personnage : ${player}, en une phrase, sans commentaire et sans details`,
-        500,
-        `Tu es mon assistant game-master qui connaît sur le bout des doigts l'univers de donjon et dragon, voici le contexte de l'histoire en cours : ${context}`
-      );
-
+    if(response.result) {
       const newStory = response.gptResponse;
-      const currentTurn = 1;
-
+      const currentTurn = previousTurn + 1;
       dispatch(updateAction({ text: newStory, turn: currentTurn }));
       navigation.navigate("ActionsHistoire");
-    } catch (error) {
+    } else {
       console.error("Une erreur s'est produite :", error);
     }
   };
 
-  const selectedStory = useSelector((state) => state.game);
-
-  console.log(selectedStory);
-
   function saveGame() {
     setLoading(true);
-    fetch(`https://gamemaster-backend.vercel.app/stories/saveStory/${token}`, {
+    fetch(`http://192.168.1.59:3000/stories/saveStory/${token}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -156,7 +151,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: "15%",
     borderRadius: 8,
     marginTop: "7%",
-    elevation: "5%",
+    //elevation: "5%",
     shadowColor: "#000",
     shadowOpacity: "3%",
     shadowOffset: { width: 0, height: 2 },
